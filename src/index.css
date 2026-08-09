@@ -4,21 +4,21 @@
 
 @layer base {
   :root {
-    --color-bg: #f8fafc;
-    --color-surface: #ffffff;
-    --color-border: #e2e8f0;
-    --color-text: #0f172a;
-    --color-muted: #64748b;
-    --color-accent: #0ea5e9;
+    --color-bg: #120F0A;
+    --color-surface: #3B200B;
+    --color-border: #5A3416;
+    --color-text: #FFF8E8;
+    --color-muted: #F2C66C;
+    --color-accent: #D76F02;
   }
 
   .dark {
-    --color-bg: #030712;
-    --color-surface: #0a0f1e;
-    --color-border: #1e293b;
-    --color-text: #f1f5f9;
-    --color-muted: #94a3b8;
-    --color-accent: #38bdf8;
+    --color-bg: #120F0A;
+    --color-surface: #3B200B;
+    --color-border: #5A3416;
+    --color-text: #FFF8E8;
+    --color-muted: #F2C66C;
+    --color-accent: #D76F02;
   }
 
   * {
@@ -34,8 +34,8 @@
   }
 
   ::selection {
-    background: rgba(14, 165, 233, 0.3);
-    color: #f1f5f9;
+    background: rgba(215, 111, 2, 0.35);
+    color: #FFF8E8;
   }
 
   ::-webkit-scrollbar {
@@ -45,11 +45,11 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #334155;
+    background: #3B200B;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #0ea5e9;
+    background: #FAA718;
   }
 }
 
@@ -64,11 +64,11 @@
 
   .gradient-text {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #2dd4bf 100%);
+    background-image: linear-gradient(135deg, #D76F02 0%, #FAA718 50%, #FCCF46 100%);
   }
 
   .glow-blue {
-    box-shadow: 0 0 40px rgba(56, 189, 248, 0.15), 0 0 80px rgba(56, 189, 248, 0.05);
+    box-shadow: 0 0 40px rgba(215, 111, 2, 0.2), 0 0 80px rgba(250, 167, 24, 0.08);
   }
 
   .glass {
@@ -87,8 +87,8 @@
 /* Custom grid pattern background */
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(215, 111, 2, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(215, 111, 2, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -112,7 +112,7 @@
   position: absolute;
   inset: -1px;
   border-radius: 17px;
-  background: linear-gradient(135deg, #38bdf8, #818cf8, #2dd4bf, #38bdf8);
+  background: linear-gradient(135deg, #D76F02, #FAA718, #FCCF46, #D76F02);
   background-size: 300% 300%;
   animation: gradient 4s ease infinite;
   z-index: -1;
@@ -152,7 +152,7 @@
   100% { background-position: 200% 0; }
 }
 .shimmer {
-  background: linear-gradient(90deg, transparent, rgba(56,189,248,0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(215,111,2,0.12), transparent);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
