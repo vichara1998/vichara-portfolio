@@ -33,7 +33,7 @@ export default function Navbar() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "glass bg-navy-900/90 dark:bg-navy-900/90 light:bg-white/90 border-b border-white/5 shadow-xl shadow-black/20"
+            ? "backdrop-blur-md border-b shadow-xl transition-colors duration-300 bg-[#FAF6E9]/80 text-amber-950 border-[#D7A65A]/40 dark:bg-[#3B200B]/90 dark:text-[#FFF8E8] dark:border-white/10"
             : "bg-transparent"
         }`}
       >
@@ -51,7 +51,7 @@ export default function Navbar() {
                   {PERSONAL.initials}
                 </span>
               </div>
-              <span className="font-display font-semibold text-white hidden sm:block">
+              <span className="font-display font-semibold text-amber-950 dark:text-white hidden sm:block">
                 {PERSONAL.name.split(" ")[0]}
                 <span className="text-electric-400">.</span>
               </span>
@@ -67,14 +67,14 @@ export default function Navbar() {
                     onClick={() => handleNav(link.href)}
                     className={`relative px-4 py-2 text-sm font-body font-medium rounded-lg transition-colors duration-200 ${
                       isActive
-                        ? "text-electric-400"
-                        : "text-slate-400 hover:text-white"
+                        ? "text-electric-400 dark:text-electric-400"
+                        : "text-slate-800 hover:text-amber-950 dark:text-slate-300 dark:hover:text-white"
                     }`}
                   >
                     {isActive && (
                       <motion.span
                         layoutId="nav-pill"
-                        className="absolute inset-0 bg-electric-500/10 rounded-lg border border-electric-500/20"
+                        className="absolute inset-0 bg-electric-500/10 rounded-lg border border-electric-500/30 dark:border-electric-500/20"
                         transition={{
                           type: "spring",
                           bounce: 0.2,
@@ -95,7 +95,7 @@ export default function Navbar() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={toggle}
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all duration-200"
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-800 hover:text-amber-950 hover:bg-[#FAF6E9]/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/10 transition-all duration-200"
                 aria-label="Toggle theme"
               >
                 <AnimatePresence mode="wait">
@@ -126,7 +126,7 @@ export default function Navbar() {
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+                className="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-slate-800 hover:text-amber-950 hover:bg-[#FAF6E9]/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/10 transition-all"
               >
                 {mobileOpen ? <X size={18} /> : <Menu size={18} />}
               </button>
@@ -143,14 +143,14 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="fixed top-16 inset-x-0 z-40 glass bg-navy-900/95 border-b border-white/10 md:hidden"
+            className="fixed top-16 inset-x-0 z-40 backdrop-blur-md bg-[#FAF6E9]/90 border-b border-[#D7A65A]/30 dark:bg-[#3B200B]/95 dark:border-white/10 md:hidden"
           >
             <div className="section-container py-6 flex flex-col gap-2">
               {NAV_LINKS.map((link) => (
                 <button
                   key={link.href}
                   onClick={() => handleNav(link.href)}
-                  className="text-left px-4 py-3 rounded-xl text-slate-300 hover:text-electric-400 hover:bg-electric-500/10 font-medium transition-all"
+                  className="text-left px-4 py-3 rounded-xl text-slate-800 hover:text-electric-400 hover:bg-electric-500/10 dark:text-slate-300 dark:hover:text-electric-400 font-medium transition-all"
                 >
                   {link.label}
                 </button>
