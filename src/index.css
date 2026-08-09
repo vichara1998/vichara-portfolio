@@ -4,21 +4,33 @@
 
 @layer base {
   :root {
-    --color-bg: #120F0A;
-    --color-surface: #3B200B;
-    --color-border: #5A3416;
-    --color-text: #FFF8E8;
-    --color-muted: #F2C66C;
+    --color-bg: #FFF8E8;
+    --color-surface: #F8E4BF;
+    --color-surface-2: #F2CFAE;
+    --color-border: #D7A65A;
+    --color-border-soft: rgba(91, 52, 22, 0.16);
+    --color-text: #120F0A;
+    --color-text-muted: #5A3416;
+    --color-text-soft: #8F5A1C;
     --color-accent: #D76F02;
+    --color-accent-2: #FAA718;
+    --color-highlight: #FCCF46;
+    --color-overlay: rgba(255, 248, 232, 0.7);
   }
 
-  .dark {
+  html.dark {
     --color-bg: #120F0A;
     --color-surface: #3B200B;
+    --color-surface-2: #4A2A11;
     --color-border: #5A3416;
+    --color-border-soft: rgba(255, 248, 232, 0.12);
     --color-text: #FFF8E8;
-    --color-muted: #F2C66C;
+    --color-text-muted: #F2C66C;
+    --color-text-soft: #F7D28C;
     --color-accent: #D76F02;
+    --color-accent-2: #FAA718;
+    --color-highlight: #FCCF46;
+    --color-overlay: rgba(255, 255, 255, 0.05);
   }
 
   * {
@@ -31,6 +43,16 @@
     background-color: var(--color-bg);
     color: var(--color-text);
     transition: background-color 0.3s ease, color 0.3s ease;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
   }
 
   ::selection {
@@ -155,6 +177,31 @@
   background: linear-gradient(90deg, transparent, rgba(215,111,2,0.12), transparent);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
+}
+
+/* Theme-aware utility overrides */
+.bg-navy-950 { background-color: var(--color-bg) !important; }
+.bg-navy-900 { background-color: var(--color-surface) !important; }
+.bg-navy-800 { background-color: var(--color-surface-2) !important; }
+.bg-navy-700 { background-color: var(--color-surface-2) !important; }
+
+.text-white { color: var(--color-text) !important; }
+.text-slate-300 { color: var(--color-text-soft) !important; }
+.text-slate-400 { color: var(--color-text-muted) !important; }
+.text-slate-500 { color: var(--color-text-soft) !important; }
+.text-slate-600 { color: var(--color-text-soft) !important; }
+.text-slate-700 { color: var(--color-text-muted) !important; }
+
+.border-white\/10,
+.border-white\/5,
+.border-white\/15 {
+  border-color: var(--color-border-soft) !important;
+}
+
+.bg-white\/5,
+.bg-white\/10,
+.bg-white\/15 {
+  background-color: var(--color-overlay) !important;
 }
 
 /* Light mode overrides */

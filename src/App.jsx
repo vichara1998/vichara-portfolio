@@ -15,7 +15,7 @@ import Contact from "./sections/Contact";
  */
 export default function App() {
   return (
-    <div className="relative min-h-screen bg-[#120F0A] text-[#FFF8E8] dark:bg-[#120F0A] light:bg-[#FFF8E8]">
+    <div className="relative min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
       {/* Scroll progress indicator */}
       <ScrollProgress />
 
