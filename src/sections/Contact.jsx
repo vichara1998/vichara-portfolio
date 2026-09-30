@@ -4,7 +4,6 @@ import {
   Send,
   Github,
   Linkedin,
-  Twitter,
   Mail,
   MapPin,
   CheckCircle,
@@ -72,9 +71,7 @@ export default function Contact() {
         setStatus("error");
       }
     } catch {
-      // For demo purposes
-      // setStatus("success");
-      // setForm({ name: "", email: "", message: "" });
+      setStatus("error");
     }
 
     setTimeout(() => setStatus("idle"), 5000);
@@ -95,20 +92,18 @@ export default function Contact() {
           className="mb-16"
         >
           <div className="flex items-center gap-4 mb-4">
-            <span className="text-electric-400 font-mono text-sm font-medium">
-              06.
+            <span className="font-mono text-xs text-[var(--color-accent)]">
+              06
             </span>
-            <span className="text-slate-500 text-sm font-medium uppercase tracking-widest">
-              Contact
-            </span>
-            <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
+            <span className="text-xs uppercase text-slate-500">Contact</span>
+            <div className="h-px flex-1 bg-[var(--color-border-soft)]" />
           </div>
           <h2 className="section-title text-white">
             Let's <span className="gradient-text">connect</span>
           </h2>
           <p className="text-slate-400 mt-4 max-w-xl">
-            Whether you have an opportunity, a project idea, or just want to
-            talk code, my inbox is always open.
+            For internship opportunities or questions about a project, send me a
+            note.
           </p>
         </motion.div>
 
@@ -118,64 +113,47 @@ export default function Contact() {
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="md:col-span-2 flex flex-col gap-6"
+            className="flex flex-col gap-7 md:col-span-2"
           >
-            {/* Availability status */}
-            <div className="gradient-border p-[1px] rounded-2xl">
-              <div className="rounded-2xl bg-navy-900 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="w-2.5 h-2.5 rounded-full bg-teal-400 shadow-[0_0_8px_2px_rgba(45,212,191,0.5)] animate-pulse" />
-                  <span className="text-sm font-medium text-teal-300">
-                    Currently available
-                  </span>
-                </div>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  {PERSONAL.availability}
-                </p>
+            <div className="border-t border-[var(--color-border-soft)] pt-5">
+              <p className="text-sm font-medium text-[var(--color-accent-2)]">
+                {PERSONAL.availability}
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-500">
+                Based in {PERSONAL.location}.
+              </p>
+            </div>
+
+            <div className="space-y-4 border-t border-[var(--color-border-soft)] pt-5">
+              <div className="flex items-center gap-3 text-sm text-slate-400">
+                <Mail size={16} className="text-electric-400" />
+                <a
+                  href={`mailto:${PERSONAL.email}`}
+                  className="transition-colors hover:text-white"
+                >
+                  {PERSONAL.email}
+                </a>
+              </div>
+              <div className="flex items-center gap-3 text-sm text-slate-400">
+                <MapPin size={16} className="text-electric-400" />
+                <span>{PERSONAL.location}</span>
               </div>
             </div>
 
-            {/* Contact details */}
-            <div className="gradient-border p-[1px] rounded-2xl">
-              <div className="rounded-2xl bg-navy-900 p-6 space-y-4">
-                <div className="flex items-center gap-3 text-sm text-slate-400">
-                  <Mail size={16} className="text-electric-400" />
+            <div className="border-t border-[var(--color-border-soft)] pt-5">
+              <p className="mb-4 text-xs uppercase text-slate-500">Profiles</p>
+              <div className="flex flex-wrap gap-x-5 gap-y-3">
+                {SOCIAL_LINKS.map(({ icon: Icon, label, href, color }) => (
                   <a
-                    href={`mailto:${PERSONAL.email}`}
-                    className="hover:text-electric-400 transition-colors"
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-2 text-xs text-slate-500 transition-colors ${color}`}
                   >
-                    {PERSONAL.email}
+                    <Icon size={15} /> {label}
                   </a>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-slate-400">
-                  <MapPin size={16} className="text-electric-400" />
-                  <span>{PERSONAL.location}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Socials */}
-            <div className="gradient-border p-[1px] rounded-2xl">
-              <div className="rounded-2xl bg-navy-900 p-6">
-                <p className="text-xs text-slate-500 uppercase tracking-widest font-medium mb-4">
-                  Find me online
-                </p>
-                <div className="flex items-center gap-3">
-                  {SOCIAL_LINKS.map(({ icon: Icon, label, href, color }) => (
-                    <motion.a
-                      key={label}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.12, y: -2 }}
-                      whileTap={{ scale: 0.9 }}
-                      aria-label={label}
-                      className={`w-11 h-11 rounded-xl flex items-center justify-center text-slate-500 ${color} bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-200`}
-                    >
-                      <Icon size={18} />
-                    </motion.a>
-                  ))}
-                </div>
+                ))}
               </div>
             </div>
           </motion.div>
@@ -185,9 +163,9 @@ export default function Contact() {
             initial={{ opacity: 0, x: 30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="md:col-span-3 gradient-border p-[1px] rounded-2xl"
+            className="border-t border-[var(--color-border-soft)] pt-6 md:col-span-3 md:border-l md:border-t-0 md:pl-8 md:pt-0"
           >
-            <div className="h-full rounded-2xl bg-navy-900 p-8">
+            <div className="h-full">
               <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                 {/* Name + Email row */}
                 <div className="grid sm:grid-cols-2 gap-4">
@@ -206,10 +184,14 @@ export default function Contact() {
                     },
                   ].map(({ name, label, placeholder, type }) => (
                     <div key={name}>
-                      <label className="block text-xs font-medium text-slate-400 mb-2">
+                      <label
+                        htmlFor={`contact-${name}`}
+                        className="mb-2 block text-xs font-medium text-slate-400"
+                      >
                         {label}
                       </label>
                       <input
+                        id={`contact-${name}`}
                         type={type}
                         name={name}
                         value={form[name]}
@@ -224,10 +206,14 @@ export default function Contact() {
 
                 {/* Message */}
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-2">
+                  <label
+                    htmlFor="contact-message"
+                    className="mb-2 block text-xs font-medium text-slate-400"
+                  >
                     Message
                   </label>
                   <textarea
+                    id="contact-message"
                     name="message"
                     value={form.message}
                     onChange={handleChange}
@@ -268,7 +254,7 @@ export default function Contact() {
                     status !== "loading" ? { scale: 1.02, y: -1 } : {}
                   }
                   whileTap={status !== "loading" ? { scale: 0.98 } : {}}
-                  className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-gradient-to-r from-electric-500 to-violet-500 text-white font-semibold shadow-lg shadow-electric-500/20 hover:shadow-electric-500/35 transition-shadow duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="flex min-h-12 w-full items-center justify-center gap-2 bg-[var(--color-accent)] px-5 py-3 text-white font-medium transition-colors hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {status === "loading" ? (
                     <>

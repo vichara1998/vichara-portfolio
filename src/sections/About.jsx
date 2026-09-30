@@ -1,22 +1,25 @@
 import { motion } from "framer-motion";
-import {
-  MapPin,
-  Mail,
-  Calendar,
-  Coffee,
-  Code2,
-  Zap,
-  Phone,
-} from "lucide-react";
+import { MapPin, Mail, Phone } from "lucide-react";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { PERSONAL } from "../data";
 
-const FUN_FACTS = [
-  { icon: Coffee, label: "Cups of coffee/day", value: "3+" },
-  { icon: Code2, label: "Projects completed", value: "3+" },
-  { icon: Zap, label: "Technologies learned", value: "10+" },
-  { icon: Calendar, label: "Years coding", value: "3+" },
+const FOCUS_AREAS = [
+  {
+    number: "01",
+    title: "Mobile applications",
+    detail: "Java, Android and SQLite",
+  },
+  {
+    number: "02",
+    title: "Web development",
+    detail: "JavaScript, PHP and MySQL",
+  },
+  {
+    number: "03",
+    title: "Applied projects",
+    detail: "IoT prototypes and machine learning",
+  },
 ];
 
 export default function About() {
@@ -24,10 +27,7 @@ export default function About() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="about" className="relative py-24 md:py-32">
-      {/* Section background accent */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-electric-500/2 to-transparent pointer-events-none" />
-
+    <section id="about" className="py-24 md:py-32">
       <div className="section-container">
         <motion.div
           ref={ref}
@@ -37,17 +37,15 @@ export default function About() {
         >
           {/* Section label */}
           <div className="flex items-center gap-4 mb-4">
-            <span className="text-electric-400 font-mono text-sm font-medium">
-              01.
+            <span className="font-mono text-xs text-[var(--color-accent)]">
+              01
             </span>
-            <span className="text-slate-500 text-sm font-medium uppercase tracking-widest">
-              About Me
-            </span>
-            <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
+            <span className="text-xs uppercase text-slate-500">Profile</span>
+            <div className="h-px flex-1 bg-[var(--color-border-soft)]" />
           </div>
 
-          <h2 className="section-title text-white mb-12">
-            The person behind the <span className="gradient-text">code</span>
+          <h2 className="section-title mb-12 text-white">
+            A little about my work
           </h2>
         </motion.div>
 
@@ -60,48 +58,50 @@ export default function About() {
             className="space-y-5"
           >
             <p className="text-slate-300 text-lg leading-relaxed">
-              Hey! I'm{" "}
-              <span className="text-white font-semibold">{PERSONAL.name}</span>,
-              a Software Engineering undergraduate at The Open University of Sri
-              Lanka. My journey into coding began with curiosity — and quickly
-              turned into a passion for building things that actually work and
-              help people.
+              I'm{" "}
+              <span className="font-semibold text-white">{PERSONAL.name}</span>,
+              a software engineering undergraduate at The Open University of Sri
+              Lanka. I work mainly in Java and have built Android applications,
+              database-backed web projects and small IoT systems.
             </p>
             <p className="text-slate-400 leading-relaxed">
-              I've built <span className="text-white">Android apps</span> with
-              Java and SQLite, developed full-stack web platforms using PHP and
-              MySQL, and even experimented with{" "}
-              <span className="text-white">IoT systems</span> with Arduino. I've
-              gained theoretical grounding in{" "}
-              <span className="text-white">Spring Boot</span> and RESTful APIs
-              through coursework and self-study.
+              My recent work includes mobile navigation, service-booking
+              workflows, and a knowledge-grounded customer support chatbot. I
+              enjoy working through the practical details: data, application
+              behavior and the interface people use.
             </p>
             <p className="text-slate-400 leading-relaxed">
-              I'm a fast learner who thrives in collaborative environments. I
-              believe great software comes from understanding the problem
-              deeply, writing clean code, and never stopping to learn. I'm
-              actively looking for an{" "}
-              <span className="text-electric-400 font-medium">
-                internship opportunity
-              </span>{" "}
-              where I can contribute meaningfully from day one.
+              I am currently looking for a software engineering internship where
+              I can learn from an experienced team and contribute to production
+              work.
             </p>
 
-            {/* Info chips */}
-            <div className="flex flex-wrap gap-3 pt-2">
+            <div className="flex flex-col gap-3 border-t border-[var(--color-border-soft)] pt-5 sm:flex-row sm:flex-wrap sm:gap-x-6">
               {[
                 { icon: MapPin, text: PERSONAL.location },
-                { icon: Mail, text: PERSONAL.email },
-                { icon: Phone, text: PERSONAL.phone },
-              ].map(({ icon: Icon, text }) => (
-                <span
-                  key={text}
-                  className="flex items-center gap-2 text-sm text-slate-400 bg-white/5 border border-white/10 rounded-xl px-4 py-2"
-                >
-                  <Icon size={14} className="text-electric-400" />
-                  {text}
-                </span>
-              ))}
+                {
+                  icon: Mail,
+                  text: PERSONAL.email,
+                  href: `mailto:${PERSONAL.email}`,
+                },
+                {
+                  icon: Phone,
+                  text: PERSONAL.phone,
+                  href: `tel:${PERSONAL.phone.replaceAll(" ", "")}`,
+                },
+              ].map(({ icon: Icon, text, href }) => {
+                const Element = href ? "a" : "span";
+                return (
+                  <Element
+                    key={text}
+                    href={href}
+                    className="flex items-center gap-2 text-sm text-slate-500 transition-colors hover:text-white"
+                  >
+                    <Icon size={14} className="text-[var(--color-accent)]" />
+                    {text}
+                  </Element>
+                );
+              })}
             </div>
           </motion.div>
 
@@ -110,26 +110,22 @@ export default function About() {
             initial={{ opacity: 0, x: 40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="grid grid-cols-2 gap-4"
+            className="border-t border-[var(--color-border-soft)]"
           >
-            {FUN_FACTS.map(({ icon: Icon, label, value }, i) => (
+            {FOCUS_AREAS.map(({ number, title, detail }, i) => (
               <motion.div
-                key={label}
+                key={number}
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.3 + i * 0.08, duration: 0.5 }}
-                className="gradient-border group p-[1px] rounded-2xl"
+                className="grid grid-cols-[40px_1fr] gap-4 border-b border-[var(--color-border-soft)] py-6"
               >
-                <div className="h-full bg-navy-800/80 hover:bg-navy-800 rounded-2xl p-6 flex flex-col gap-3 transition-colors duration-200">
-                  <div className="w-10 h-10 rounded-xl bg-electric-500/10 flex items-center justify-center group-hover:bg-electric-500/20 transition-colors">
-                    <Icon size={20} className="text-electric-400" />
-                  </div>
-                  <div>
-                    <div className="font-display text-3xl font-bold text-white">
-                      {value}
-                    </div>
-                    <div className="text-xs text-slate-500 mt-0.5">{label}</div>
-                  </div>
+                <span className="font-mono text-xs text-[var(--color-accent)]">
+                  {number}
+                </span>
+                <div>
+                  <h3 className="font-medium text-white">{title}</h3>
+                  <p className="mt-1 text-sm text-slate-500">{detail}</p>
                 </div>
               </motion.div>
             ))}

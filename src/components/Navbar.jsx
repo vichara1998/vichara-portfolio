@@ -28,105 +28,70 @@ export default function Navbar() {
   return (
     <>
       <motion.nav
-        initial={{ y: -100, opacity: 0 }}
+        initial={{ y: -12, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? "backdrop-blur-md border-b shadow-xl transition-colors duration-300 bg-[#FAF6E9]/80 text-amber-950 border-[#D7A65A]/40 dark:bg-[#3B200B]/90 dark:text-[#FFF8E8] dark:border-white/10"
-            : "bg-transparent"
-        }`}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="fixed inset-x-0 top-0 z-50 border-b transition-colors duration-200"
+        style={{
+          backgroundColor: scrolled
+            ? "color-mix(in srgb, var(--color-bg) 94%, transparent)"
+            : "transparent",
+          borderColor: scrolled ? "var(--color-border-soft)" : "transparent",
+          backdropFilter: scrolled ? "blur(12px)" : "none",
+        }}
       >
         <div className="section-container">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <motion.button
+          <div className="flex h-[68px] items-center justify-between">
+            <button
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 group"
+              className="text-sm font-semibold tracking-normal text-white"
+              aria-label="Back to top"
             >
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-electric-400 to-violet-500 flex items-center justify-center shadow-lg shadow-electric-500/30 group-hover:shadow-electric-500/50 transition-shadow">
-                <span className="font-display font-bold text-white text-sm">
-                  {PERSONAL.initials}
-                </span>
-              </div>
-              <span className="font-display font-semibold text-amber-950 dark:text-white hidden sm:block">
-                {PERSONAL.name.split(" ")[0]}
-                <span className="text-electric-400">.</span>
-              </span>
-            </motion.button>
+              {PERSONAL.name}
+            </button>
 
-            {/* Desktop Nav Links */}
-            <div className="hidden md:flex items-center gap-1">
+            <div className="hidden items-center gap-6 md:flex">
               {NAV_LINKS.map((link) => {
                 const isActive = activeSection === link.href.slice(1);
                 return (
                   <button
                     key={link.href}
                     onClick={() => handleNav(link.href)}
-                    className={`relative px-4 py-2 text-sm font-body font-medium rounded-lg transition-colors duration-200 ${
-                      isActive
-                        ? "text-electric-400 dark:text-electric-400"
-                        : "text-slate-800 hover:text-amber-950 dark:text-slate-300 dark:hover:text-white"
-                    }`}
+                    aria-current={isActive ? "location" : undefined}
+                    className={`relative py-2 text-xs transition-colors duration-200 ${isActive ? "text-white" : "text-slate-500 hover:text-white"}`}
                   >
-                    {isActive && (
-                      <motion.span
-                        layoutId="nav-pill"
-                        className="absolute inset-0 bg-electric-500/10 rounded-lg border border-electric-500/30 dark:border-electric-500/20"
-                        transition={{
-                          type: "spring",
-                          bounce: 0.2,
-                          duration: 0.4,
-                        }}
-                      />
-                    )}
-                    <span className="relative">{link.label}</span>
+                    {link.label}
+                    <span
+                      className={`absolute inset-x-0 bottom-0 h-px bg-[var(--color-accent)] transition-transform ${isActive ? "scale-x-100" : "scale-x-0"}`}
+                    />
                   </button>
                 );
               })}
             </div>
 
-            {/* Right Actions */}
-            <div className="flex items-center gap-3">
-              {/* Theme Toggle */}
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+            <div className="flex items-center gap-4">
+              <button
                 onClick={toggle}
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-800 hover:text-amber-950 hover:bg-[#FAF6E9]/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/10 transition-all duration-200"
-                aria-label="Toggle theme"
+                className="flex h-9 w-9 items-center justify-center text-slate-500 transition-colors hover:text-white"
+                aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
               >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={isDark ? "moon" : "sun"}
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {isDark ? <Sun size={17} /> : <Moon size={17} />}
-                  </motion.div>
-                </AnimatePresence>
-              </motion.button>
+                {isDark ? <Sun size={17} /> : <Moon size={17} />}
+              </button>
 
-              {/* Resume Button */}
-              <motion.a
+              <a
                 href={PERSONAL.resumeUrl}
                 download
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-electric-500/10 hover:bg-electric-500/20 border border-electric-500/30 hover:border-electric-500/60 text-electric-400 text-sm font-medium transition-all duration-200"
+                className="hidden items-center gap-2 border-b border-[var(--color-accent)] py-2 text-xs font-medium text-[var(--color-accent)] transition-colors hover:text-white sm:flex"
               >
                 <Download size={14} />
                 Resume
-              </motion.a>
+              </a>
 
-              {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-slate-800 hover:text-amber-950 hover:bg-[#FAF6E9]/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/10 transition-all"
+                className="flex h-9 w-9 items-center justify-center text-slate-400 transition-colors hover:text-white md:hidden"
+                aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+                aria-expanded={mobileOpen}
               >
                 {mobileOpen ? <X size={18} /> : <Menu size={18} />}
               </button>
@@ -143,14 +108,14 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="fixed top-16 inset-x-0 z-40 backdrop-blur-md bg-[#FAF6E9]/90 border-b border-[#D7A65A]/30 dark:bg-[#3B200B]/95 dark:border-white/10 md:hidden"
+            className="fixed inset-x-0 top-[68px] z-40 border-b border-[var(--color-border-soft)] bg-[var(--color-bg)] md:hidden"
           >
-            <div className="section-container py-6 flex flex-col gap-2">
+            <div className="section-container flex flex-col py-4">
               {NAV_LINKS.map((link) => (
                 <button
                   key={link.href}
                   onClick={() => handleNav(link.href)}
-                  className="text-left px-4 py-3 rounded-xl text-slate-800 hover:text-electric-400 hover:bg-electric-500/10 dark:text-slate-300 dark:hover:text-electric-400 font-medium transition-all"
+                  className="border-b border-[var(--color-border-soft)] py-3 text-left text-sm text-slate-400 transition-colors hover:text-white"
                 >
                   {link.label}
                 </button>
@@ -158,7 +123,7 @@ export default function Navbar() {
               <a
                 href={PERSONAL.resumeUrl}
                 download
-                className="mt-2 flex items-center gap-2 px-4 py-3 rounded-xl bg-electric-500/15 border border-electric-500/30 text-electric-400 font-medium"
+                className="mt-3 flex items-center gap-2 py-3 text-sm font-medium text-[var(--color-accent)]"
               >
                 <Download size={16} />
                 Download Resume

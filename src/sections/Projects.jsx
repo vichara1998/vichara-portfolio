@@ -1,164 +1,76 @@
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import {
-  Github,
-  ExternalLink,
-  Star,
-  ArrowUpRight,
-  Calendar,
-} from "lucide-react";
+import { Github, ExternalLink, ArrowUpRight } from "lucide-react";
 import { PROJECTS, PERSONAL } from "../data";
 import ProjectModal from "../components/ProjectModal";
+
+const PROJECT_FILTERS = ["All", "AI", "Mobile", "Web"];
 
 function ProjectCard({ project, index, onOpen }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <motion.div
+    <motion.article
       ref={ref}
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      onClick={() => onOpen(project)}
-      className="group gradient-border relative p-[1px] rounded-2xl card-hover cursor-pointer"
+      className="group border-t border-[var(--color-border-soft)]"
     >
-      <div className="h-full rounded-2xl bg-navy-900 hover:bg-navy-800/80 overflow-hidden transition-colors duration-300">
-        {/* Project visual header */}
-        <div
-          className="relative h-44 overflow-hidden flex items-center justify-center"
-          style={{
-            background: `linear-gradient(135deg, ${project.color}15, ${project.color}05)`,
-          }}
-        >
-          {/* Abstract background pattern */}
-          <div className="absolute inset-0 grid-pattern opacity-30" />
-
-          {/* Glowing orb */}
-          <div
-            className="absolute w-32 h-32 rounded-full blur-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"
-            style={{ background: project.color }}
-          />
-
-          {/* Emoji icon */}
-          <div className="relative text-6xl filter drop-shadow-lg transition-transform duration-500 group-hover:scale-110">
-            {project.emoji}
-          </div>
-
-          {/* Overlay on hover — click to view details */}
-          <div className="absolute inset-0 bg-navy-950/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3">
-            <div
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all"
-              style={{
-                background: project.color + "25",
-                borderColor: project.color + "60",
-                border: "1px solid",
-                color: project.color,
-              }}
-            >
-              <ArrowUpRight size={15} />
-              View Full Details
-            </div>
-            <div className="flex items-center gap-3">
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-medium transition-all"
-              >
-                <Github size={13} />
-                Code
-              </a>
-              {project.demo && (
-                <a
-                  href={project.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-medium transition-all"
-                >
-                  <ExternalLink size={13} />
-                  Demo
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* Featured badge */}
-          {project.featured && (
-            <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs font-medium">
-              <Star size={11} fill="currentColor" />
-              Featured
-            </div>
-          )}
-
-          {/* Year badge */}
-          {project.year && (
-            <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-navy-950/50 border border-white/10 text-slate-300 text-xs font-mono">
-              <Calendar size={11} />
-              {project.year}
-            </div>
-          )}
-        </div>
-
-        {/* Content */}
-        <div className="p-6">
-          <h3 className="font-display text-xl font-bold text-white mb-2 group-hover:text-electric-400 transition-colors">
+      <div className="grid gap-4 py-6 md:grid-cols-[48px_1fr_1.25fr_120px] md:items-start md:gap-8">
+        <span className="pt-1 font-mono text-xs text-slate-500">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <div>
+          <button
+            type="button"
+            onClick={() => onOpen(project)}
+            className="group/title flex items-start gap-2 text-left font-display text-2xl leading-tight text-white transition-colors hover:text-[var(--color-accent)]"
+          >
             {project.title}
-          </h3>
-          <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-3">
+            <ArrowUpRight
+              size={16}
+              className="mt-1 shrink-0 text-[var(--color-accent)] opacity-0 transition-opacity group-hover/title:opacity-100"
+            />
+          </button>
+          <p className="mt-2 text-xs text-slate-500">{project.year}</p>
+        </div>
+        <div>
+          <p className="max-w-2xl text-sm leading-relaxed text-slate-400">
             {project.description}
           </p>
-
-          {/* Tech stack tags */}
-          <div className="flex flex-wrap gap-2">
-            {project.tech.map((t) => (
-              <span
-                key={t}
-                className="px-2.5 py-1 rounded-lg text-xs font-mono text-slate-400 bg-white/5 border border-white/10"
-              >
-                {t}
+          <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1.5">
+            {project.tech.map((technology) => (
+              <span key={technology} className="text-xs text-slate-500">
+                {technology}
               </span>
             ))}
           </div>
         </div>
-
-        {/* Bottom actions */}
-        <div className="px-6 pb-5 flex items-center gap-3">
+        <div className="flex items-center gap-4 md:flex-col md:items-start md:pt-1">
           <a
             href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-electric-400 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-slate-500 transition-colors hover:text-white"
           >
             <Github size={13} />
-            View Source
+            Source
           </a>
           {project.demo && (
-            <>
-              <span className="text-slate-700">·</span>
-              <a
-                href={project.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-teal-400 transition-colors"
-              >
-                <ExternalLink size={13} />
-                Live Demo
-              </a>
-            </>
+            <a
+              href={project.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-xs text-slate-500 transition-colors hover:text-white"
+            >
+              <ExternalLink size={13} /> Demo
+            </a>
           )}
-          <span className="text-slate-700">·</span>
-          <span className="flex items-center gap-1.5 text-xs text-slate-500 group-hover:text-violet-400 transition-colors">
-            <ArrowUpRight size={13} />
-            Full Details
-          </span>
         </div>
       </div>
-    </motion.div>
+    </motion.article>
   );
 }
 
@@ -166,11 +78,14 @@ export default function Projects() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const [activeProject, setActiveProject] = useState(null);
+  const [activeFilter, setActiveFilter] = useState("All");
+  const visibleProjects = PROJECTS.filter(
+    (project) =>
+      activeFilter === "All" || project.categories.includes(activeFilter),
+  );
 
   return (
-    <section id="projects" className="py-24 md:py-32 relative">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
+    <section id="projects" className="py-24 md:py-32">
       <div className="section-container">
         {/* Header */}
         <motion.div
@@ -181,27 +96,46 @@ export default function Projects() {
           className="mb-16"
         >
           <div className="flex items-center gap-4 mb-4">
-            <span className="text-electric-400 font-mono text-sm font-medium">
-              03.
+            <span className="text-[var(--color-accent)] font-mono text-xs">
+              03
             </span>
-            <span className="text-slate-500 text-sm font-medium uppercase tracking-widest">
-              Projects
+            <span className="text-slate-500 text-xs uppercase">
+              Selected work
             </span>
-            <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
+            <div className="h-px flex-1 bg-[var(--color-border-soft)]" />
           </div>
-          <h2 className="section-title text-white">
-            Things I've <span className="gradient-text">built</span>
-          </h2>
-          <p className="text-slate-400 mt-4 max-w-xl">
-            A selection of projects spanning AI, mobile, web, and IoT. Click any
-            card to explore the full breakdown — tech stack, highlights, and
-            screenshots.
+          <h2 className="section-title text-white">Projects and experiments</h2>
+          <p className="mt-4 max-w-xl text-slate-400">
+            A few pieces of work from coursework and independent learning,
+            across mobile, web and applied machine learning.
           </p>
         </motion.div>
 
-        {/* Project Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PROJECTS.map((project, i) => (
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
+          <p className="text-xs text-slate-500">
+            {String(visibleProjects.length).padStart(2, "0")} projects
+          </p>
+          <div
+            role="group"
+            aria-label="Filter projects by category"
+            className="flex flex-wrap items-center gap-1"
+          >
+            {PROJECT_FILTERS.map((filter) => (
+              <button
+                key={filter}
+                type="button"
+                aria-pressed={activeFilter === filter}
+                onClick={() => setActiveFilter(filter)}
+                className={`border-b px-3 py-2 text-xs transition-colors ${activeFilter === filter ? "border-[var(--color-accent)] text-[var(--color-accent)]" : "border-transparent text-slate-500 hover:text-white"}`}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="border-b border-[var(--color-border-soft)]">
+          {visibleProjects.map((project, i) => (
             <ProjectCard
               key={project.id}
               project={project}

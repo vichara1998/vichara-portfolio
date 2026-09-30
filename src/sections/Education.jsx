@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { GraduationCap, BookOpen, Users, Award } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { EDUCATION } from "../data";
 
 export default function Education() {
@@ -8,9 +8,7 @@ export default function Education() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="education" className="py-24 md:py-32 relative">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
+    <section id="education" className="py-24 md:py-32">
       <div className="section-container">
         <motion.div
           ref={ref}
@@ -20,117 +18,79 @@ export default function Education() {
           className="mb-16"
         >
           <div className="flex items-center gap-4 mb-4">
-            <span className="text-electric-400 font-mono text-sm font-medium">
-              05.
+            <span className="font-mono text-xs text-[var(--color-accent)]">
+              05
             </span>
-            <span className="text-slate-500 text-sm font-medium uppercase tracking-widest">
-              Education
-            </span>
-            <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
+            <span className="text-xs uppercase text-slate-500">Education</span>
+            <div className="h-px flex-1 bg-[var(--color-border-soft)]" />
           </div>
-          <h2 className="section-title text-white">
-            Academic <span className="gradient-text">foundation</span>
-          </h2>
+          <h2 className="section-title text-white">Education and learning</h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-5 gap-6">
-          {/* Main edu card — wider */}
+        <div className="grid gap-12 md:grid-cols-[1.5fr_0.7fr] md:gap-16">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="md:col-span-3 gradient-border p-[1px] rounded-2xl"
+            className="border-t border-[var(--color-border-soft)] pt-6"
           >
-            <div className="h-full rounded-2xl bg-navy-900 p-8">
-              {/* Logo area */}
-              <div className="flex items-start gap-5 mb-8">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-yellow-600/5 border border-yellow-500/20 flex items-center justify-center text-3xl flex-shrink-0">
-                  IMG
-                </div>
-                <div>
-                  <h3 className="font-display text-xl font-bold text-white mb-1">
-                    {EDUCATION.school}
-                  </h3>
-                  <p className="text-slate-400">{EDUCATION.degree}</p>
-                  <div className="flex items-center gap-4 mt-2 text-sm text-slate-500">
-                    <span>Graduating {EDUCATION.graduation}</span>
-                    <span>·</span>
-                    <span className="text-yellow-400 font-medium">
-                      GPA: {EDUCATION.gpa}
-                    </span>
-                  </div>
-                </div>
+            <div>
+              <h3 className="font-display text-2xl text-white">
+                {EDUCATION.school}
+              </h3>
+              <p className="mt-2 text-slate-400">{EDUCATION.degree}</p>
+              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-slate-500">
+                <span>{EDUCATION.graduation}</span>
+                <span>GPA {EDUCATION.gpa}</span>
               </div>
 
-              {/* Relevant Coursework */}
-              <div>
-                <div className="flex items-center gap-2 mb-4 text-sm font-medium text-slate-400">
-                  <BookOpen size={15} className="text-electric-400" />
-                  Relevant Coursework
+              <div className="mt-8 border-t border-[var(--color-border-soft)] pt-5">
+                <div className="mb-4 flex items-center gap-2 text-sm font-medium text-white">
+                  <BookOpen size={15} className="text-[var(--color-accent)]" />
+                  Relevant coursework
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <ul className="grid gap-x-8 sm:grid-cols-2">
                   {EDUCATION.relevant.map((course) => (
-                    <span
+                    <li
                       key={course}
-                      className="px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 bg-white/5 border border-white/10 hover:border-electric-500/30 hover:text-electric-400 transition-all duration-200 cursor-default"
+                      className="border-t border-[var(--color-border-soft)] py-2.5 text-sm text-slate-400"
                     >
                       {course}
-                    </span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             </div>
           </motion.div>
 
-          {/* Activities / honors */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="md:col-span-2 flex flex-col gap-4"
+            className="flex flex-col border-t border-[var(--color-border-soft)] pt-6"
           >
-            {/* Activities */}
-            <div className="gradient-border p-[1px] rounded-2xl flex-1">
-              <div className="h-full rounded-2xl bg-navy-900 p-6">
-                <div className="flex items-center gap-2 mb-5 text-sm font-medium text-slate-400">
-                  <Users size={15} className="text-violet-400" />
-                  Activities & Clubs
-                </div>
-                <ul className="space-y-3">
-                  {EDUCATION.activities.map((a) => (
-                    <li
-                      key={a}
-                      className="flex items-start gap-2.5 text-sm text-slate-400"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full mt-1.5 bg-violet-400 flex-shrink-0" />
-                      {a}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Honors */}
-            <div className="gradient-border p-[1px] rounded-2xl">
-              <div className="rounded-2xl bg-navy-900 p-6">
-                <div className="flex items-center gap-2 mb-4 text-sm font-medium text-slate-400">
-                  <Award size={15} className="text-yellow-400" />
-                  Honors & Awards
-                </div>
-                <ul className="space-y-3">
-                  {[
-                    // All semesters",
-                  ].map((h) => (
-                    <li
-                      key={h}
-                      className="flex items-start gap-2.5 text-sm text-slate-400"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full mt-1.5 bg-yellow-400 flex-shrink-0" />
-                      {h}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <h3 className="text-sm font-medium text-white">
+              Additional details
+            </h3>
+            <ul className="mt-4">
+              {EDUCATION.activities.map((item) => (
+                <li
+                  key={item}
+                  className="border-t border-[var(--color-border-soft)] py-3 text-sm leading-relaxed text-slate-400"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 border-t border-[var(--color-border-soft)] pt-5">
+              <p className="text-sm font-medium text-white">
+                Secondary education
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                {EDUCATION.secondarySchool}
+                <br />
+                {EDUCATION.secondaryQual} · {EDUCATION.secondaryYear}
+              </p>
             </div>
           </motion.div>
         </div>
