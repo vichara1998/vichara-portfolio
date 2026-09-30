@@ -58,7 +58,7 @@ export default function Hero() {
               </a>
               <a
                 href={PERSONAL.resumeUrl}
-                download
+                download="Vichara_Tharkana_CV.pdf"
                 className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-slate-400 transition-colors hover:text-white"
               >
                 <Download size={15} /> Resume

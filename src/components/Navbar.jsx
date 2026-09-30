@@ -80,7 +80,7 @@ export default function Navbar() {
 
               <a
                 href={PERSONAL.resumeUrl}
-                download
+                download="Vichara_Tharkana_CV.pdf"
                 className="hidden items-center gap-2 border-b border-[var(--color-accent)] py-2 text-xs font-medium text-[var(--color-accent)] transition-colors hover:text-white sm:flex"
               >
                 <Download size={14} />
@@ -122,7 +122,7 @@ export default function Navbar() {
               ))}
               <a
                 href={PERSONAL.resumeUrl}
-                download
+                download="Vichara_Tharkana_CV.pdf"
                 className="mt-3 flex items-center gap-2 py-3 text-sm font-medium text-[var(--color-accent)]"
               >
                 <Download size={16} />

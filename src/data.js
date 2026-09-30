@@ -1,3 +1,5 @@
+import resumeUrl from "./assets/Vicharana_Tharkana_CV.pdf";
+
 export const PERSONAL = {
   name: "Vichara Tharkana",
   initials: "VT",
@@ -12,7 +14,7 @@ export const PERSONAL = {
   photo: "./profile.jpg",
   // resumeUrl:
   //   "https://drive.google.com/file/d/1eHqeKbNiDKFND9JOyaOM8_21mNP7WbBY/view?usp=sharing",
-  resumeUrl: "./Vichara_Tharkana_CV.pdf",
+  resumeUrl,
   socials: {
     github: "https://github.com/vichara1998",
     linkedin: "https://www.linkedin.com/in/vichara-tharkana-384b222a2",
