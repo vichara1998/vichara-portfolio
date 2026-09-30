@@ -261,6 +261,54 @@ html.dark .ambient-light-layer::before {
   );
 }
 
+@property --portrait-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.portrait-float {
+  animation: portrait-float 7s ease-in-out infinite;
+}
+
+.portrait-frame {
+  position: relative;
+  padding: 2px;
+  border-radius: 7px;
+}
+
+.portrait-frame::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  content: "";
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--portrait-angle),
+    transparent 0deg 292deg,
+    var(--color-accent) 322deg,
+    var(--color-accent-2) 344deg,
+    transparent 360deg
+  );
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-accent) 48%, transparent));
+  animation: portrait-border-orbit 8s linear infinite;
+  pointer-events: none;
+}
+
+.portrait-photo {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes portrait-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes portrait-border-orbit {
+  to { --portrait-angle: 360deg; }
+}
+
 @keyframes ambient-grid-shift {
   from { background-position: 0 0; }
   to { background-position: 68px 68px; }
@@ -281,6 +329,11 @@ html.dark .ambient-light-layer::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .portrait-float,
+  .portrait-frame::before {
+    animation: none;
+  }
+
   .ambient-light-layer::before {
     animation-duration: 60s;
     opacity: 0.1;

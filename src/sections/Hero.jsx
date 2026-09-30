@@ -104,19 +104,21 @@ export default function Hero() {
             transition={{ duration: 0.65, delay: 0.12, ease: "easeOut" }}
             className="relative mx-auto w-full max-w-[300px] md:ml-auto"
           >
-            <div className="aspect-[4/5] overflow-hidden rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] p-2">
-              <div className="h-full w-full overflow-hidden rounded-sm bg-[var(--color-surface-2)]">
-                {PERSONAL.photo ? (
-                  <img
-                    src={PERSONAL.photo}
-                    alt={PERSONAL.name}
-                    className="h-full w-full object-cover object-center"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center font-display text-8xl text-[var(--color-accent)]">
-                    {PERSONAL.initials}
-                  </div>
-                )}
+            <div className="portrait-frame portrait-float">
+              <div className="portrait-photo aspect-[4/5] overflow-hidden rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] p-2">
+                <div className="h-full w-full overflow-hidden rounded-sm bg-[var(--color-surface-2)]">
+                  {PERSONAL.photo ? (
+                    <img
+                      src={PERSONAL.photo}
+                      alt={PERSONAL.name}
+                      className="h-full w-full object-cover object-center"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center font-display text-8xl text-[var(--color-accent)]">
+                      {PERSONAL.initials}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <figcaption className="mt-3 flex items-center justify-between border-t border-[var(--color-border)] pt-3 text-xs text-slate-500">
