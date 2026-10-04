@@ -1,5 +1,11 @@
 import resumeUrl from "./assets/Vicharana_Tharkana_CV.pdf";
 
+import exploreCityImage1 from "../projects-ss/exploreCity/1.png";
+import exploreCityImage2 from "../projects-ss/exploreCity/2.png";
+import exploreCityImage3 from "../projects-ss/exploreCity/3.png";
+import exploreCityImage4 from "../projects-ss/exploreCity/4.png";
+import exploreCityImage5 from "../projects-ss/exploreCity/5.png";
+
 export const PERSONAL = {
   name: "Vichara Tharkana",
   initials: "VT",
@@ -103,7 +109,13 @@ export const PROJECTS = [
     ],
     tech: ["Android Studio", "Java", "Google Maps API", "SQLite"],
     categories: ["Mobile"],
-    images: [],
+    images: [
+      exploreCityImage1,
+      exploreCityImage2,
+      exploreCityImage3,
+      exploreCityImage4,
+      exploreCityImage5,
+    ],
     color: "#FAA718",
     emoji: "🗺️",
     github: "https://github.com/vichara1998/explore-city",
