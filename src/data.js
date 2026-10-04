@@ -71,6 +71,38 @@ export const SKILLS = [
 
 export const PROJECTS = [
   {
+    id: 5,
+    title: "CareerPath Sri Lanka",
+    description:
+      "A career and education guidance platform helping learners across Sri Lanka discover courses and plan their next step.",
+    longDescription:
+      "Built a responsive platform connecting learners with courses and education providers across Sri Lanka. Learners can search and compare course details, create a profile, and request personalized career recommendations based on their qualifications, interests, skills, and goals. Providers can submit and manage course listings, while administrators review submissions and oversee users. An optional Gemini-powered career assistant complements built-in guidance.",
+    highlights: [
+      "Course discovery with search and filters for course type, study mode, district, and fee",
+      "Personalized pathways based on learner qualifications, interests, skills, and goals",
+      "Separate learner, provider, and administrator workflows with role-based authorization",
+      "Optional Gemini career assistant with built-in guidance when AI is not configured",
+      "Responsive React frontend backed by a Spring Boot REST API and MySQL",
+    ],
+    tech: [
+      "React ",
+      "Spring Boot ",
+      "Java ",
+      "MySQL ",
+      "Redux Toolkit",
+      "Spring Security",
+      "JWT",
+      "Gemini API",
+    ],
+    categories: ["Web", "AI"],
+    images: [],
+    color: "#0EA5E9",
+    emoji: "🎓",
+    github: "https://github.com/vichara1998/careerpath-platform",
+    demo: null,
+    featured: true,
+  },
+  {
     id: 1,
     title: "Gemini-Powered E-Commerce Chatbot",
     year: "2025",
