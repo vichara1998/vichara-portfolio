@@ -24,7 +24,7 @@ function ProjectCard({ project, index, active, onOpen }) {
       className="w-[min(82vw,390px)] shrink-0 snap-center"
     >
       <div
-        className="group h-full overflow-hidden border border-[var(--color-border-soft)] shadow-xl backdrop-blur-xl transition-colors duration-300 hover:border-[var(--color-accent)]"
+        className="group h-full overflow-hidden border border-[var(--color-border-soft)] shadow-xl transition-colors duration-300 hover:border-[var(--color-accent)]"
         style={{
           backgroundColor:
             "color-mix(in srgb, var(--color-surface) 76%, transparent)",
@@ -38,17 +38,16 @@ function ProjectCard({ project, index, active, onOpen }) {
         >
           {coverImage ? (
             <>
-              <img
-                src={coverImage}
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 h-full w-full scale-110 object-cover opacity-35 blur-xl transition-transform duration-500 group-hover:scale-125"
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: `linear-gradient(145deg, ${project.color}35, rgba(0, 0, 0, 0.36))`,
+                }}
               />
-              <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-black/60" />
               <img
                 src={coverImage}
                 alt={`${project.title} preview`}
-                loading="lazy"
+                loading={active ? "eager" : "lazy"}
                 className="absolute inset-0 h-full w-full object-contain p-3 transition-transform duration-500 group-hover:scale-[1.04]"
               />
             </>
@@ -59,10 +58,6 @@ function ProjectCard({ project, index, active, onOpen }) {
                 background: `radial-gradient(circle at 75% 25%, ${project.color}55, transparent 38%), linear-gradient(145deg, color-mix(in srgb, var(--color-surface-2) 76%, transparent), color-mix(in srgb, var(--color-bg) 92%, transparent))`,
               }}
             >
-              <div
-                className="absolute h-40 w-40 rounded-full blur-3xl opacity-30"
-                style={{ backgroundColor: project.color }}
-              />
               <span
                 aria-hidden="true"
                 className="relative text-7xl drop-shadow-2xl transition-transform duration-300 group-hover:scale-110"
@@ -77,7 +72,7 @@ function ProjectCard({ project, index, active, onOpen }) {
           <span className="absolute left-4 top-4 font-mono text-xs text-white drop-shadow">
             {String(index + 1).padStart(2, "0")}
           </span>
-          <span className="absolute right-4 top-4 border border-white/25 bg-black/30 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white backdrop-blur">
+          <span className="absolute right-4 top-4 border border-white/25 bg-black/45 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white">
             {project.categories[0]}
           </span>
         </button>
@@ -196,7 +191,9 @@ export default function Projects() {
       }
     });
 
-    setActiveIndex(closestIndex);
+    setActiveIndex((currentIndex) =>
+      currentIndex === closestIndex ? currentIndex : closestIndex,
+    );
   }
 
   function moveCarousel(direction) {
