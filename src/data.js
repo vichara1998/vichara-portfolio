@@ -1,10 +1,10 @@
 import resumeUrl from "./assets/Vicharana_Tharkana_CV.pdf";
 
-import exploreCityImage1 from "../projects-ss/exploreCity/1.png";
-import exploreCityImage2 from "../projects-ss/exploreCity/2.png";
-import exploreCityImage3 from "../projects-ss/exploreCity/3.png";
-import exploreCityImage4 from "../projects-ss/exploreCity/4.png";
-import exploreCityImage5 from "../projects-ss/exploreCity/5.png";
+import exploreCityImage1 from "../projects-ss/exploreCity/optimized/1.jpg";
+import exploreCityImage2 from "../projects-ss/exploreCity/optimized/2.jpg";
+import exploreCityImage3 from "../projects-ss/exploreCity/optimized/3.jpg";
+import exploreCityImage4 from "../projects-ss/exploreCity/optimized/4.jpg";
+import exploreCityImage5 from "../projects-ss/exploreCity/optimized/5.jpg";
 
 export const PERSONAL = {
   name: "Vichara Tharkana",
