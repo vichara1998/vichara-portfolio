@@ -64,9 +64,6 @@ function ProjectCard({ project, index, active, onOpen }) {
               >
                 {project.emoji}
               </span>
-              <span className="absolute bottom-4 left-5 font-mono text-[10px] uppercase tracking-[0.25em] text-white/60">
-                Project spotlight
-              </span>
             </div>
           )}
           <span className="absolute left-4 top-4 font-mono text-xs text-white drop-shadow">
