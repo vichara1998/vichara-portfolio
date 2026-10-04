@@ -259,9 +259,14 @@ export default function Projects() {
           <div
             ref={carouselRef}
             onScroll={updateActiveCard}
-            className="flex snap-x snap-mandatory items-stretch gap-5 overflow-x-auto overflow-y-hidden px-[max(1.5rem,calc((100%-min(82vw,390px))/2))] py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex snap-x snap-proximity items-stretch gap-5 overflow-x-auto overflow-y-hidden px-[max(1.5rem,calc((100%-min(82vw,390px))/2))] py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             role="region"
             aria-label="Project cards"
+            style={{
+              touchAction: "pan-x pan-y",
+              WebkitOverflowScrolling: "touch",
+              overscrollBehaviorX: "contain",
+            }}
           >
             {visibleProjects.map((project, index) => (
               <ProjectCard
