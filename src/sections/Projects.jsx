@@ -20,7 +20,7 @@ function ProjectCard({ project, index, active, onOpen }) {
       aria-label={`${project.title}${active ? ", selected project" : ""}`}
       aria-current={active ? "true" : undefined}
       animate={{ scale: active ? 1 : 0.94, opacity: active ? 1 : 0.68 }}
-      transition={{ duration: 0.25 }}
+      transition={{ duration: 0.16 }}
       className="w-[min(82vw,390px)] shrink-0 snap-center"
     >
       <div
@@ -160,6 +160,9 @@ function ProjectCard({ project, index, active, onOpen }) {
 export default function Projects() {
   const ref = useRef(null);
   const carouselRef = useRef(null);
+  const dragRef = useRef(null);
+  const suppressClickRef = useRef(false);
+  const animationFrameRef = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const [activeProject, setActiveProject] = useState(null);
   const [activeFilter, setActiveFilter] = useState("All");
@@ -171,7 +174,10 @@ export default function Projects() {
 
   useEffect(() => {
     setActiveIndex(0);
-    carouselRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+    if (carouselRef.current) carouselRef.current.scrollLeft = 0;
   }, [activeFilter]);
 
   function updateActiveCard() {
@@ -197,16 +203,101 @@ export default function Projects() {
   }
 
   function moveCarousel(direction) {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
     const nextIndex = Math.max(
       0,
       Math.min(visibleProjects.length - 1, activeIndex + direction),
     );
-    carouselRef.current?.children[nextIndex]?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "center",
-    });
+    const nextCard = carousel.children[nextIndex];
+    if (!nextCard) return;
+
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+    const start = carousel.scrollLeft;
+    const cardCenter =
+      nextCard.getBoundingClientRect().left +
+      nextCard.clientWidth / 2 -
+      carousel.getBoundingClientRect().left;
+    const target = Math.max(
+      0,
+      Math.min(
+        carousel.scrollWidth - carousel.clientWidth,
+        start + cardCenter - carousel.clientWidth / 2,
+      ),
+    );
+    const distance = target - start;
+    const duration = 180;
+    let startedAt;
+
+    function animateScroll(timestamp) {
+      if (startedAt === undefined) startedAt = timestamp;
+      const progress = Math.min((timestamp - startedAt) / duration, 1);
+      const easedProgress = 1 - (1 - progress) ** 3;
+      carousel.scrollLeft = start + distance * easedProgress;
+      if (progress < 1) {
+        animationFrameRef.current = requestAnimationFrame(animateScroll);
+      } else {
+        animationFrameRef.current = null;
+      }
+    }
+
+    animationFrameRef.current = requestAnimationFrame(animateScroll);
     setActiveIndex(nextIndex);
+  }
+
+  function handlePointerDown(event) {
+    if (event.pointerType !== "mouse" || event.button !== 0) return;
+
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startScrollLeft: event.currentTarget.scrollLeft,
+      moved: false,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function handlePointerMove(event) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    const deltaX = event.clientX - drag.startX;
+    if (!drag.moved && Math.abs(deltaX) > 4) drag.moved = true;
+    if (drag.moved) {
+      event.preventDefault();
+      event.currentTarget.scrollLeft = drag.startScrollLeft - deltaX;
+    }
+  }
+
+  function handlePointerUp(event) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    if (drag.moved) {
+      suppressClickRef.current = true;
+      window.setTimeout(() => {
+        suppressClickRef.current = false;
+      }, 0);
+    }
+    dragRef.current = null;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  }
+
+  function handleClickCapture(event) {
+    if (!suppressClickRef.current) return;
+    event.preventDefault();
+    event.stopPropagation();
+    suppressClickRef.current = false;
   }
 
   return (
@@ -262,9 +353,15 @@ export default function Projects() {
           <div
             ref={carouselRef}
             onScroll={updateActiveCard}
-            className="flex snap-x snap-mandatory items-stretch gap-5 overflow-x-auto overflow-y-hidden px-[max(1.5rem,calc((100%-min(82vw,390px))/2))] py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+            onClickCapture={handleClickCapture}
+            className="flex snap-x snap-mandatory items-stretch gap-5 overflow-x-auto overflow-y-hidden px-[max(1.5rem,calc((100%-min(82vw,390px))/2))] py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden cursor-grab active:cursor-grabbing"
             role="region"
             aria-label="Project cards"
+            style={{ touchAction: "pan-y" }}
           >
             {visibleProjects.map((project, index) => (
               <ProjectCard
