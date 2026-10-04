@@ -233,28 +233,32 @@ export default function ProjectModal({ project, onClose }) {
             )}
 
             {/* Action buttons */}
-            <div className="flex flex-wrap items-center gap-3">
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex min-h-11 items-center gap-2 border border-white/10 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:border-white/25"
-              >
-                <Github size={16} />
-                View Source Code
-              </a>
-              {project.demo && (
-                <a
-                  href={project.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex min-h-11 items-center gap-2 border border-[var(--color-accent)] px-4 py-2.5 text-sm font-medium text-[var(--color-accent)] transition-colors hover:text-white"
-                >
-                  <ExternalLink size={16} />
-                  Live Demo
-                </a>
-              )}
-            </div>
+            {(project.github || project.demo) && (
+              <div className="flex flex-wrap items-center gap-3">
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex min-h-11 items-center gap-2 border border-white/10 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:border-white/25"
+                  >
+                    <Github size={16} />
+                    View Source Code
+                  </a>
+                )}
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex min-h-11 items-center gap-2 border border-[var(--color-accent)] px-4 py-2.5 text-sm font-medium text-[var(--color-accent)] transition-colors hover:text-white"
+                  >
+                    <ExternalLink size={16} />
+                    Live Demo
+                  </a>
+                )}
+              </div>
+            )}
           </div>
         </motion.div>
       </motion.div>
