@@ -25,6 +25,11 @@ import chatbotImage4 from "../projects-ss/chat-botAI/optimized/4.jpg";
 import chatbotImage5 from "../projects-ss/chat-botAI/optimized/5.jpg";
 import chatbotImage6 from "../projects-ss/chat-botAI/optimized/6.jpg";
 import chatbotImage7 from "../projects-ss/chat-botAI/optimized/7.jpg";
+import vcsImage1 from "../projects-ss/vcs/VCS_card.png";
+import vcsImage2 from "../projects-ss/vcs/VCS 1.png";
+import vcsImage3 from "../projects-ss/vcs/VCS 2.png";
+import vcsImage4 from "../projects-ss/vcs/VCS 3.png";
+
 
 export const PERSONAL = {
   name: "Vichara Tharkana",
@@ -212,7 +217,12 @@ export const PROJECTS = [
     ],
     tech: ["HTML", "CSS", "JavaScript", "PHP", "MySQL"],
     categories: ["Web"],
-    images: [],
+    images: [
+      vcsImage1,
+      vcsImage2,
+      vcsImage3,
+      vcsImage4,
+    ],
     color: "#FCCF46",
     emoji: "🚗",
     github: "https://github.com/vehicleCareSE/VCS_website_group_project.git",
