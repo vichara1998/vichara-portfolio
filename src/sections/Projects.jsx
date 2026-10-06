@@ -175,12 +175,14 @@ export default function Projects() {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
-    const center = carousel.getBoundingClientRect().left + carousel.clientWidth / 2;
+    const center =
+      carousel.getBoundingClientRect().left + carousel.clientWidth / 2;
     let closestIndex = 0;
     let closestDistance = Number.POSITIVE_INFINITY;
 
     Array.from(carousel.children).forEach((card, index) => {
-      const cardCenter = card.getBoundingClientRect().left + card.clientWidth / 2;
+      const cardCenter =
+        card.getBoundingClientRect().left + card.clientWidth / 2;
       const distance = Math.abs(center - cardCenter);
       if (distance < closestDistance) {
         closestDistance = distance;
@@ -289,7 +291,10 @@ export default function Projects() {
             >
               <ArrowLeft size={17} />
             </button>
-            <div className="flex items-center gap-2" aria-label="Project position">
+            <div
+              className="flex items-center gap-2"
+              aria-label="Project position"
+            >
               {visibleProjects.map((project, index) => (
                 <button
                   key={project.id}
