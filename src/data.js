@@ -5,6 +5,19 @@ import exploreCityImage2 from "../projects-ss/exploreCity/optimized/2.jpg";
 import exploreCityImage3 from "../projects-ss/exploreCity/optimized/3.jpg";
 import exploreCityImage4 from "../projects-ss/exploreCity/optimized/4.jpg";
 import exploreCityImage5 from "../projects-ss/exploreCity/optimized/5.jpg";
+import careerPathImage1 from "../projects-ss/career-path/optimized/1.jpg";
+import careerPathImage2 from "../projects-ss/career-path/optimized/2.jpg";
+import careerPathImage3 from "../projects-ss/career-path/optimized/3.jpg";
+import careerPathImage4 from "../projects-ss/career-path/optimized/4.jpg";
+import careerPathImage5 from "../projects-ss/career-path/optimized/5.jpg";
+import careerPathImage6 from "../projects-ss/career-path/optimized/6.jpg";
+import careerPathImage7 from "../projects-ss/career-path/optimized/7.jpg";
+import careerPathImage8 from "../projects-ss/career-path/optimized/8.jpg";
+import careerPathImage9 from "../projects-ss/career-path/optimized/9.jpg";
+import careerPathImage10 from "../projects-ss/career-path/optimized/10.jpg";
+import careerPathImage11 from "../projects-ss/career-path/optimized/11.jpg";
+import careerPathImage12 from "../projects-ss/career-path/optimized/12.jpg";
+import careerPathImage13 from "../projects-ss/career-path/optimized/13.jpg";
 
 export const PERSONAL = {
   name: "Vichara Tharkana",
@@ -95,7 +108,21 @@ export const PROJECTS = [
       "Gemini API",
     ],
     categories: ["Web", "AI"],
-    images: [],
+    images: [
+      careerPathImage1,
+      careerPathImage2,
+      careerPathImage3,
+      careerPathImage4,
+      careerPathImage5,
+      careerPathImage6,
+      careerPathImage7,
+      careerPathImage8,
+      careerPathImage9,
+      careerPathImage10,
+      careerPathImage11,
+      careerPathImage12,
+      careerPathImage13,
+    ],
     color: "#0EA5E9",
     emoji: "🎓",
     github: "https://github.com/vichara1998/careerpath-platform",
