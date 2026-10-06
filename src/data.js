@@ -225,7 +225,7 @@ export const PROJECTS = [
     ],
     color: "#FCCF46",
     emoji: "🚗",
-    github: "https://github.com/vehicleCareSE/VCS_website_group_project.git",
+    github: "https://github.com/vichara1998/vehicle-care-system",
     demo: null,
     featured: true,
   },
