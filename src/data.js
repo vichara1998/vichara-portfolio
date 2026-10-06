@@ -18,6 +18,13 @@ import careerPathImage10 from "../projects-ss/career-path/optimized/10.jpg";
 import careerPathImage11 from "../projects-ss/career-path/optimized/11.jpg";
 import careerPathImage12 from "../projects-ss/career-path/optimized/12.jpg";
 import careerPathImage13 from "../projects-ss/career-path/optimized/13.jpg";
+import chatbotImage1 from "../projects-ss/chat-botAI/optimized/1.jpg";
+import chatbotImage2 from "../projects-ss/chat-botAI/optimized/2.jpg";
+import chatbotImage3 from "../projects-ss/chat-botAI/optimized/3.jpg";
+import chatbotImage4 from "../projects-ss/chat-botAI/optimized/4.jpg";
+import chatbotImage5 from "../projects-ss/chat-botAI/optimized/5.jpg";
+import chatbotImage6 from "../projects-ss/chat-botAI/optimized/6.jpg";
+import chatbotImage7 from "../projects-ss/chat-botAI/optimized/7.jpg";
 
 export const PERSONAL = {
   name: "Vichara Tharkana",
@@ -145,7 +152,15 @@ export const PROJECTS = [
     ],
     tech: ["Next.js", "TypeScript", "Google Gemini API", "Astra DB"],
     categories: ["AI", "Web"],
-    images: [],
+    images: [
+      chatbotImage1,
+      chatbotImage2,
+      chatbotImage3,
+      chatbotImage4,
+      chatbotImage5,
+      chatbotImage6,
+      chatbotImage7,
+    ],
     color: "#D76F02",
     emoji: "🤖",
     github: "https://github.com/vichara1998/gemini-ecommerce-assistant",
