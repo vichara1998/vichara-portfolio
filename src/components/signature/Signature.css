@@ -2,6 +2,11 @@
   width: min(100%, 14rem);
 }
 
+.signature-container.hero-signature {
+  width: min(8rem, 30vw);
+  margin-top: 0;
+}
+
 .signature-vector {
   display: block;
   width: 100%;
