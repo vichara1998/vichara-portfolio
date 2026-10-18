@@ -3,7 +3,6 @@ import { MapPin, Mail, Phone } from "lucide-react";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { PERSONAL } from "../data";
-import SignatureVector from "../components/signature/SignatureVector";
 
 const FOCUS_AREAS = [
   {
@@ -104,8 +103,6 @@ export default function About() {
                 );
               })}
             </div>
-
-            <SignatureVector />
           </motion.div>
 
           {/* Right- Fun stats */}
