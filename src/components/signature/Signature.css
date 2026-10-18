@@ -1,0 +1,94 @@
+.signature-container {
+  width: min(100%, 14rem);
+}
+
+.signature-vector {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.signature-vector path {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: none;
+}
+
+.signature-container.is-visible .signature-vector path {
+  animation-name: draw-signature;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes draw-signature {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.signature-vector .entry {
+  animation-duration: 1.15s;
+  animation-delay: 0.1s;
+}
+
+.signature-vector .upper-sweep {
+  animation-duration: 1.45s;
+  animation-delay: 1.16s;
+}
+
+.signature-vector .middle-loop {
+  animation-duration: 0.9s;
+  animation-delay: 2.56s;
+}
+
+.signature-vector .carry {
+  animation-duration: 2.25s;
+  animation-delay: 3.44s;
+}
+
+.signature-vector .underline {
+  animation-duration: 0.95s;
+  animation-delay: 5.6s;
+}
+
+.signature-vector .dot {
+  animation-duration: 0.27s;
+  animation-delay: 6.57s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signature-vector .entry {
+    animation-duration: 0.65s;
+    animation-delay: 0s;
+  }
+
+  .signature-vector .upper-sweep {
+    animation-duration: 0.75s;
+    animation-delay: 0.6s;
+  }
+
+  .signature-vector .middle-loop {
+    animation-duration: 0.5s;
+    animation-delay: 1.3s;
+  }
+
+  .signature-vector .carry {
+    animation-duration: 1.1s;
+    animation-delay: 1.75s;
+  }
+
+  .signature-vector .underline {
+    animation-duration: 0.5s;
+    animation-delay: 2.8s;
+  }
+
+  .signature-vector .dot {
+    animation-duration: 0.15s;
+    animation-delay: 3.2s;
+  }
+}
