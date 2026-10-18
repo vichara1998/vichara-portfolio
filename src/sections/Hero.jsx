@@ -1,4 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import SignatureVector from "../components/signature/SignatureVector";
 import {
   ArrowDown,
   Github,
@@ -10,13 +12,30 @@ import {
 import { PERSONAL, PROJECTS } from "../data";
 
 export default function Hero() {
+  const heroRef = useRef(null);
+  const hasEnteredView = useInView(heroRef, { once: true, amount: 0.15 });
+
   return (
     <section
+      ref={heroRef}
       id="hero"
-      className="relative min-h-[88vh] flex items-center overflow-hidden"
+      className={`relative min-h-[88vh] flex items-center overflow-hidden${hasEnteredView ? " hero-transition-started" : ""}`}
     >
+      <div className="hero-backdrop" aria-hidden="true">
+        <img
+          src={`${import.meta.env.BASE_URL}bg1.png`}
+          alt=""
+          className="hero-background-image hero-background-image-down"
+        />
+        <img
+          src={`${import.meta.env.BASE_URL}bg2.png`}
+          alt=""
+          className="hero-background-image hero-background-image-up"
+        />
+        <div className="hero-backdrop-overlay" />
+      </div>
       <div className="section-container relative z-10 w-full pt-28 pb-20 md:pt-36 md:pb-24">
-        <div className="grid md:grid-cols-[1.2fr_0.8fr] items-center gap-12 md:gap-20">
+        <div>
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -63,6 +82,7 @@ export default function Hero() {
               >
                 <Download size={15} /> Resume
               </a>
+              <SignatureVector className="hero-signature" />
             </div>
 
             <div className="mt-10 flex items-center gap-5 border-t border-white/10 pt-5">
@@ -99,37 +119,6 @@ export default function Hero() {
 
           </motion.div>
 
-          <motion.figure
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.12, ease: "easeOut" }}
-            className="relative mx-auto w-full max-w-[300px] md:ml-auto"
-          >
-            <div className="portrait-frame portrait-float">
-              <div className="portrait-photo aspect-[4/5] overflow-hidden rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] p-2">
-                <div className="h-full w-full overflow-hidden rounded-sm bg-[var(--color-surface-2)]">
-                  {PERSONAL.photo ? (
-                    <img
-                      src={PERSONAL.photo}
-                      alt={PERSONAL.name}
-                      className="h-full w-full object-cover object-center"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center font-display text-8xl text-[var(--color-accent)]">
-                      {PERSONAL.initials}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            <figcaption className="mt-3 flex items-center justify-between border-t border-[var(--color-border)] pt-3 text-xs text-slate-500">
-              <span>{PERSONAL.location}</span>
-              <span className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent-2)]" />
-                Open to internship opportunities
-              </span>
-            </figcaption>
-          </motion.figure>
         </div>
 
         <div className="mt-12 grid grid-cols-2 border-y border-[var(--color-border-soft)] md:grid-cols-4">
