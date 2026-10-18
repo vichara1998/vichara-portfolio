@@ -96,6 +96,7 @@ export default function Hero() {
                 </a>
               ))}
             </div>
+
           </motion.div>
 
           <motion.figure
