@@ -2,14 +2,14 @@ import { useRef } from "react";
 import { useInView } from "framer-motion";
 import "./Signature.css";
 
-export default function SignatureVector() {
+export default function SignatureVector({ className = "" }) {
   const signatureRef = useRef(null);
   const isInView = useInView(signatureRef, { amount: 0.2 });
 
   return (
     <div
       ref={signatureRef}
-      className={`signature-container mt-5${isInView ? " is-visible" : ""}`}
+      className={`signature-container ${className}${isInView ? " is-visible" : ""}`}
       aria-hidden="true"
     >
       <svg className="signature-vector" viewBox="165 125 480 350">
