@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Signature — real SVG stroke drawing preview</title>
+<style>
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #090e18; color: #edf2ff; font: 500 14px/1.6 system-ui, sans-serif; }
+.preview { width: min(94vw, 840px); padding: clamp(18px, 5vw, 42px); border-radius: 28px; background: linear-gradient(145deg, #151d2b, #0c1320 80%); border: 1px solid #ffffff13; box-shadow: 0 20px 80px #0006; }
+.eyebrow { margin: 0; color: #90a4bc; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; }
+.signature-svg { display: block; width: 100%; height: auto; color: #adbbff; overflow: visible; }
+.signature-svg path { fill: none; stroke: currentColor; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation-name: signature-draw; animation-timing-function: ease-in-out; animation-fill-mode: forwards; }
+@keyframes signature-draw { to { stroke-dashoffset: 0; } }
+.controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.controls p { color: #94a4b9; font-size: 13px; margin: 0; }
+button { background: #e5ecff; border: 0; border-radius: 999px; color: #121a2a; padding: 10px 22px; font: inherit; font-weight: 650; cursor: pointer; }
+button:hover { background: white; }
+button:focus-visible { outline: 3px solid #9baeff; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .signature-svg path { animation: none; stroke-dashoffset: 0; } }
+
+.signature-svg .entry { animation-duration: 1.15s; animation-delay: 0.1s; }
+.signature-svg .upper-sweep { animation-duration: 1.45s; animation-delay: 1.16s; }
+.signature-svg .middle-loop { animation-duration: 0.9s; animation-delay: 2.56s; }
+.signature-svg .carry { animation-duration: 2.25s; animation-delay: 3.44s; }
+.signature-svg .underline { animation-duration: 0.95s; animation-delay: 5.6s; }
+.signature-svg .dot { animation-duration: 0.27s; animation-delay: 6.57s; }</style></head>
+<body><main class="preview"><p class="eyebrow">Handwritten signature · Vector stroke animation</p>
+<div id="drawing" style="width:100%"><svg class="signature-svg" viewBox="165 125 480 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand-drawn signature animation">
+      <path class="entry" pathLength="1" d="M 307 357 C 311 337, 298 293, 273 248 C 251 208, 226 167, 229 157 C 241 144, 273 192, 291 239 C 309 283, 317 329, 307 357"/>
+      <path class="upper-sweep" pathLength="1" d="M 201 330 C 230 293, 289 234, 339 194 C 360 177, 384 166, 386 170 C 391 175, 348 216, 322 244 C 283 290, 257 340, 245 363"/>
+      <path class="middle-loop" pathLength="1" d="M 245 363 C 272 321, 314 275, 347 271 C 360 267, 357 278, 351 286 C 337 311, 318 339, 307 357"/>
+      <path class="carry" pathLength="1" d="M 307 357 C 321 380, 339 397, 356 404 C 366 409, 375 359, 389 304 C 395 280, 398 268, 398 276 C 404 307, 388 328, 413 329 C 429 331, 455 293, 473 261 C 469 283, 490 278, 513 257 C 542 233, 552 207, 573 194 C 579 193, 563 217, 561 222 C 568 235, 589 213, 601 211"/>
+      <path class="underline" pathLength="1" d="M 298 452 C 327 429, 344 406, 373 383 C 431 330, 495 278, 553 238 C 573 224, 591 217, 601 212"/>
+      <path class="dot" pathLength="1" d="M 440 386 C 441 380, 449 374, 453 375 C 459 379, 454 385, 450 386"/>
+</svg></div>
+<div class="controls"><p>Draws each line in sequence · 6.8 seconds</p><button type="button" id="replay">↻ Replay drawing</button></div>
+</main>
+<script>document.getElementById('replay').addEventListener('click', () => {
+  const drawing = document.getElementById('drawing');
+  drawing.querySelectorAll('path').forEach(path => {path.style.animation = 'none';});
+  void drawing.offsetWidth;
+  drawing.querySelectorAll('path').forEach(path => {path.style.animation = '';});
+});</script></body></html>
