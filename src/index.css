@@ -4,33 +4,37 @@
 
 @layer base {
   :root {
-    --color-bg: #fff8e8;
-    --color-surface: #f8e4bf;
-    --color-surface-2: #f2cfae;
-    --color-border: #d7a65a;
-    --color-border-soft: rgba(91, 52, 22, 0.16);
-    --color-text: #120f0a;
-    --color-text-muted: #5a3416;
-    --color-text-soft: #8f5a1c;
-    --color-accent: #d76f02;
-    --color-accent-2: #faa718;
-    --color-highlight: #fccf46;
-    --color-overlay: rgba(255, 248, 232, 0.7);
+    --color-bg: #effbfa;
+    --color-surface: #d9f3f1;
+    --color-surface-2: #bde8e6;
+    --color-border: #5bb9b7;
+    --color-border-soft: rgba(8, 73, 75, 0.16);
+    --color-text: #08282a;
+    --color-text-muted: #285456;
+    --color-text-soft: #52797a;
+    --color-accent: #087f83;
+    --color-accent-2: #0ca9ad;
+    --color-accent-warm: #d86b55;
+    --color-accent-gold: #b77b24;
+    --color-highlight: #9de2de;
+    --color-overlay: rgba(239, 251, 250, 0.76);
   }
 
   html.dark {
-    --color-bg: #1e2521;
-    --color-surface: #272f2a;
-    --color-surface-2: #313a34;
-    --color-border: #46514a;
-    --color-border-soft: rgba(236, 240, 235, 0.13);
-    --color-text: #edf0eb;
-    --color-text-muted: #bac3bc;
-    --color-text-soft: #929d95;
-    --color-accent: #e18469;
-    --color-accent-2: #87b4a6;
-    --color-highlight: #43594e;
-    --color-overlay: rgba(236, 240, 235, 0.045);
+    --color-bg: #041416;
+    --color-surface: #092326;
+    --color-surface-2: #103538;
+    --color-border: #176166;
+    --color-border-soft: rgba(195, 244, 242, 0.14);
+    --color-text: #e8f8f7;
+    --color-text-muted: #b4d0cf;
+    --color-text-soft: #82a7a6;
+    --color-accent: #21d5d9;
+    --color-accent-2: #00aeb5;
+    --color-accent-warm: #ff806e;
+    --color-accent-gold: #ffc15c;
+    --color-highlight: #12595d;
+    --color-overlay: rgba(4, 20, 22, 0.72);
   }
 
   * {
@@ -82,6 +86,28 @@
 
   .section-title {
     @apply font-display text-4xl md:text-5xl font-normal;
+    position: relative;
+    width: fit-content;
+  }
+
+  .section-title::after {
+    display: block;
+    width: 3.25rem;
+    height: 2px;
+    margin-top: 0.85rem;
+    content: "";
+    background: linear-gradient(
+      90deg,
+      var(--color-accent),
+      var(--color-accent-warm) 72%,
+      var(--color-accent-gold)
+    );
+    transform-origin: left;
+    transition: width 0.3s ease;
+  }
+
+  .section-title:hover::after {
+    width: 5rem;
   }
 
   .gradient-text {
@@ -252,6 +278,44 @@ html.dark .ambient-light-layer::before {
   filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-accent-2) 75%, transparent));
 }
 
+.ambient-streak:nth-of-type(3n) {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--color-accent-warm) 18%, transparent) 12%,
+    color-mix(in srgb, var(--color-accent-warm) 70%, transparent) 72%,
+    transparent
+  );
+}
+
+.ambient-streak-bottom:nth-of-type(3n) {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-accent-warm) 70%, transparent),
+    color-mix(in srgb, var(--color-accent-warm) 18%, transparent) 72%,
+    transparent
+  );
+}
+
+.ambient-streak-secondary:nth-of-type(3n) {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--color-accent-gold) 18%, transparent) 12%,
+    color-mix(in srgb, var(--color-accent-gold) 70%, transparent) 72%,
+    transparent
+  );
+}
+
+.ambient-streak-bottom.ambient-streak-secondary:nth-of-type(3n) {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-accent-gold) 70%, transparent),
+    color-mix(in srgb, var(--color-accent-gold) 18%, transparent) 72%,
+    transparent
+  );
+}
+
 .ambient-streak-bottom.ambient-streak-secondary {
   background: linear-gradient(
     to top,
@@ -261,44 +325,77 @@ html.dark .ambient-light-layer::before {
   );
 }
 
-@property --portrait-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
+.hero-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--color-bg);
 }
 
-.portrait-float {
-  animation: portrait-float 7s ease-in-out infinite;
+.hero-background-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 42%;
+  opacity: 0;
 }
 
-.portrait-frame {
+.hero-background-image-down {
+  opacity: 1;
+}
+
+.hero-transition-started .hero-background-image-down,
+.hero-transition-started .hero-background-image-up {
+  animation-duration: 2.8s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: forwards;
+}
+
+.hero-transition-started .hero-background-image-down {
+  animation-name: hero-image-down;
+}
+
+.hero-transition-started .hero-background-image-up {
+  animation-name: hero-image-up;
+}
+
+.hero-backdrop-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, var(--color-bg) 0%, color-mix(in srgb, var(--color-bg) 92%, transparent) 34%, color-mix(in srgb, var(--color-bg) 56%, transparent) 58%, transparent 100%),
+    linear-gradient(0deg, var(--color-bg) 0%, color-mix(in srgb, var(--color-bg) 12%, transparent) 36%, rgba(0, 8, 10, 0.18) 100%);
+}
+
+#skills li {
   position: relative;
-  padding: 3px;
-  border-radius: 7px;
-  background: conic-gradient(
-    from var(--portrait-angle),
-    transparent 0deg 248deg,
-    color-mix(in srgb, var(--color-accent) 42%, transparent) 274deg,
-    var(--color-accent) 308deg,
-    var(--color-accent-2) 340deg,
-    transparent 360deg
-  );
-  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--color-accent) 64%, transparent));
-  animation: portrait-border-orbit 4s linear infinite;
+  transition:
+    color 0.2s ease,
+    padding-left 0.2s ease;
 }
 
-.portrait-photo {
-  position: relative;
-  z-index: 1;
+#skills li::before {
+  position: absolute;
+  left: 0;
+  color: var(--color-accent-warm);
+  content: "•";
+  opacity: 0;
+  transform: translateX(-0.35rem);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
-@keyframes portrait-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+#skills li:hover {
+  padding-left: 0.85rem;
+  color: var(--color-accent) !important;
 }
 
-@keyframes portrait-border-orbit {
-  to { --portrait-angle: 360deg; }
+#skills li:hover::before {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 @keyframes ambient-grid-shift {
@@ -320,12 +417,17 @@ html.dark .ambient-light-layer::before {
   to { transform: translateY(26px) scaleY(1); opacity: 0.85; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .portrait-float,
-  .portrait-frame {
-    animation: none;
-  }
+@keyframes hero-image-down {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
 
+@keyframes hero-image-up {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
   .ambient-light-layer::before {
     animation-duration: 60s;
     opacity: 0.1;
@@ -337,6 +439,18 @@ html.dark .ambient-light-layer::before {
 
   .ambient-light {
     animation-duration: 54s;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-background-image {
+    object-position: 62% center;
+  }
+
+  .hero-backdrop-overlay {
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--color-bg) 94%, transparent), color-mix(in srgb, var(--color-bg) 88%, transparent) 72%, color-mix(in srgb, var(--color-bg) 82%, transparent)),
+      linear-gradient(0deg, var(--color-bg) 0%, color-mix(in srgb, var(--color-bg) 18%, transparent) 46%, rgba(0, 8, 10, 0.3) 100%);
   }
 }
 
