@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Moon, Sun, Download, Menu, X } from "lucide-react";
+import { Moon, Sun, SunMoon, FileDown, Menu, X } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
 import { useScrollSpy } from "../hooks/useScrollSpy";
 import { PERSONAL, NAV_LINKS } from "../data";
+import { scrollBehavior } from "../scrollBehavior";
 
 const SECTION_IDS = NAV_LINKS.map((l) => l.href.slice(1));
 
 export default function Navbar() {
-  const { isDark, toggle } = useTheme();
+  const { mode, nextMode, cycleTheme } = useTheme();
+  const ThemeIcon = mode === "auto" ? SunMoon : mode === "dark" ? Moon : Sun;
+  const themeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const activeSection = useScrollSpy(SECTION_IDS, 120);
@@ -22,7 +25,7 @@ export default function Navbar() {
   const handleNav = (href) => {
     setMobileOpen(false);
     const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (el) el.scrollIntoView({ behavior: scrollBehavior() });
   };
 
   return (
@@ -41,9 +44,9 @@ export default function Navbar() {
         }}
       >
         <div className="section-container">
-          <div className="flex h-[68px] items-center justify-between">
+          <div className="flex h-[4.25rem] items-center justify-between">
             <button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              onClick={() => window.scrollTo({ top: 0, behavior: scrollBehavior() })}
               className="text-sm font-semibold tracking-normal text-white"
               aria-label="Back to top"
             >
@@ -71,19 +74,23 @@ export default function Navbar() {
 
             <div className="flex items-center gap-4">
               <button
-                onClick={toggle}
-                className="flex h-9 w-9 items-center justify-center text-slate-500 transition-colors hover:text-white"
-                aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
+                type="button"
+                onClick={cycleTheme}
+                className="nav-theme-toggle flex h-11 min-w-11 items-center justify-center gap-2 px-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent)]"
+                aria-label={`Theme: ${themeLabel}${mode === "auto" ? " (follows system)" : ""}. Switch to ${nextMode} mode`}
+                title={`Theme: ${themeLabel}. Click for ${nextMode} mode`}
               >
-                {isDark ? <Sun size={17} /> : <Moon size={17} />}
+                <ThemeIcon size={19} aria-hidden="true" />
+                <span className="hidden text-xs sm:inline">{themeLabel}</span>
               </button>
 
               <a
                 href={PERSONAL.resumeUrl}
                 download="Vichara_Tharkana_CV.pdf"
-                className="hidden items-center gap-2 border-b border-[var(--color-accent)] py-2 text-xs font-medium text-[var(--color-accent)] transition-colors hover:text-white sm:flex"
+                className="nav-resume-link hidden items-center gap-2 sm:inline-flex"
+                aria-label="Download resume as PDF"
               >
-                <Download size={14} />
+                <FileDown size={17} strokeWidth={1.6} aria-hidden="true" />
                 Resume
               </a>
 
@@ -108,7 +115,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-x-0 top-[68px] z-40 border-b border-[var(--color-border-soft)] bg-[var(--color-bg)] md:hidden"
+            className="fixed inset-x-0 top-[4.25rem] z-40 border-b border-[var(--color-border-soft)] bg-[var(--color-bg)] md:hidden"
           >
             <div className="section-container flex flex-col py-4">
               {NAV_LINKS.map((link) => (
@@ -123,10 +130,12 @@ export default function Navbar() {
               <a
                 href={PERSONAL.resumeUrl}
                 download="Vichara_Tharkana_CV.pdf"
-                className="mt-3 flex items-center gap-2 py-3 text-sm font-medium text-[var(--color-accent)]"
+                onClick={() => setMobileOpen(false)}
+                className="nav-resume-link mt-4 inline-flex items-center gap-2 self-start"
+                aria-label="Download resume as PDF"
               >
-                <Download size={16} />
-                Download Resume
+                <FileDown size={17} strokeWidth={1.6} aria-hidden="true" />
+                Download resume
               </a>
             </div>
           </motion.div>
