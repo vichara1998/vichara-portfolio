@@ -5,6 +5,7 @@ import { useTheme } from "../hooks/useTheme";
 import { useScrollSpy } from "../hooks/useScrollSpy";
 import { PERSONAL, NAV_LINKS } from "../data";
 import { scrollBehavior } from "../scrollBehavior";
+import "./Navbar.css";
 
 const SECTION_IDS = NAV_LINKS.map((l) => l.href.slice(1));
 
@@ -18,9 +19,28 @@ export default function Navbar() {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const dismiss = (event) => {
+      if (event.type === "keydown" && event.key === "Escape") setMobileOpen(false);
+      if (event.type === "pointerdown" && !event.target.closest(".reference-navbar, .reference-mobile-menu")) setMobileOpen(false);
+    };
+    const desktop = window.matchMedia("(min-width: 1200px)");
+    const closeOnDesktop = () => { if (desktop.matches) setMobileOpen(false); };
+    document.addEventListener("keydown", dismiss);
+    document.addEventListener("pointerdown", dismiss);
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => {
+      document.removeEventListener("keydown", dismiss);
+      document.removeEventListener("pointerdown", dismiss);
+      desktop.removeEventListener("change", closeOnDesktop);
+    };
+  }, [mobileOpen]);
 
   const handleNav = (href) => {
     setMobileOpen(false);
@@ -34,26 +54,25 @@ export default function Navbar() {
         initial={{ y: -12, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="fixed inset-x-0 top-0 z-50 border-b transition-colors duration-200"
-        style={{
-          backgroundColor: scrolled
-            ? "color-mix(in srgb, var(--color-bg) 94%, transparent)"
-            : "transparent",
-          borderColor: scrolled ? "var(--color-border-soft)" : "transparent",
-          backdropFilter: scrolled ? "blur(12px)" : "none",
-        }}
+        className={`reference-navbar${scrolled ? " is-scrolled" : ""}`}
+        aria-label="Main navigation"
       >
-        <div className="section-container">
-          <div className="flex h-[4.25rem] items-center justify-between">
+        <div className="reference-navbar-shell">
+          <svg className="reference-navbar-curve" viewBox="0 0 128 100" preserveAspectRatio="none" aria-hidden="true">
+            <defs><linearGradient id="nav-curve-gradient" x1="0" y1="1" x2="1" y2="0"><stop stopColor="var(--color-accent)" /><stop offset="1" stopColor="#b194e2" /></linearGradient></defs>
+            <path d="M0 100C72 100 40 0 108 0H128C60 0 92 100 20 100Z" fill="url(#nav-curve-gradient)" />
+          </svg>
+          <div className="reference-navbar-row">
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: scrollBehavior() })}
-              className="text-sm font-semibold tracking-normal text-white"
+              className="reference-navbar-brand"
               aria-label="Back to top"
             >
-              {PERSONAL.name}
+              <span className="reference-brand-mark" aria-hidden="true">{PERSONAL.initials}</span>
+              <span className="reference-brand-copy"><span>{PERSONAL.name}</span><small>Software engineering</small></span>
             </button>
 
-            <div className="hidden items-center gap-6 md:flex">
+            <div className="reference-navlinks">
               {NAV_LINKS.map((link) => {
                 const isActive = activeSection === link.href.slice(1);
                 return (
@@ -61,18 +80,15 @@ export default function Navbar() {
                     key={link.href}
                     onClick={() => handleNav(link.href)}
                     aria-current={isActive ? "location" : undefined}
-                    className={`relative py-2 text-xs transition-colors duration-200 ${isActive ? "text-white" : "text-slate-500 hover:text-white"}`}
+                    className={`reference-navlink${isActive ? " is-active" : ""}`}
                   >
                     {link.label}
-                    <span
-                      className={`absolute inset-x-0 bottom-0 h-px bg-[var(--color-accent)] transition-transform ${isActive ? "scale-x-100" : "scale-x-0"}`}
-                    />
                   </button>
                 );
               })}
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="reference-navbar-actions">
               <button
                 type="button"
                 onClick={cycleTheme}
@@ -103,9 +119,11 @@ export default function Navbar() {
 
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="flex h-9 w-9 items-center justify-center text-slate-400 transition-colors hover:text-white md:hidden"
+                type="button"
+                className="reference-menu-toggle"
                 aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
                 aria-expanded={mobileOpen}
+                aria-controls="mobile-navigation"
               >
                 {mobileOpen ? <X size={18} /> : <Menu size={18} />}
               </button>
@@ -122,9 +140,10 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-x-0 top-[4.25rem] z-40 border-b border-[var(--color-border-soft)] bg-[var(--color-bg)] md:hidden"
+            id="mobile-navigation"
+            className="reference-mobile-menu"
           >
-            <div className="section-container flex flex-col py-4">
+            <div className="flex flex-col p-4">
               {NAV_LINKS.map((link) => (
                 <button
                   key={link.href}
