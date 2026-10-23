@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, MotionConfig } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import SignatureVector from "../components/signature/SignatureVector";
 import {
@@ -8,23 +8,52 @@ import {
   Facebook,
   Download,
   ArrowUpRight,
+  MapPin,
 } from "lucide-react";
 import { PERSONAL, PROJECTS } from "../data";
 import { scrollBehavior } from "../scrollBehavior";
+import "./Hero.css";
+
+function AnimatedNameLine({ text, className, delay, play }) {
+  return (
+    <span className={`hero-name-line ${className}`} aria-hidden="true">
+      {Array.from(text).map((letter, index) => (
+        <motion.span
+          key={`${letter}-${index}`}
+          className="hero-name-character"
+          initial={{ opacity: 0, y: "-105%" }}
+          animate={{ opacity: play ? 1 : 0, y: play ? 0 : "-105%" }}
+          transition={{ duration: 0.7, delay: play ? delay + index * 0.065 : 0, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {letter === " " ? "\u00a0" : letter}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
 
 export default function Hero() {
   const heroRef = useRef(null);
   const backdropRef = useRef(null);
   const [portraitsReady, setPortraitsReady] = useState(false);
+  const [introReady, setIntroReady] = useState(false);
   const hasEnteredView = useInView(heroRef, { once: true, amount: 0.15 });
+  const playIntro = introReady && hasEnteredView;
 
   useEffect(() => {
     let cancelled = false;
+    const fallback = window.setTimeout(() => setIntroReady(true), 2000);
     const portraits = Array.from(backdropRef.current.querySelectorAll("img"));
     Promise.all(portraits.map((portrait) => portrait.decode()))
       .then(() => { if (!cancelled) setPortraitsReady(true); })
-      .catch(() => { /* Keep the original portrait if the next image cannot load. */ });
-    return () => { cancelled = true; };
+      .catch(() => { /* Keep the original portrait if the next image cannot load. */ })
+      .finally(() => {
+        if (!cancelled) {
+          window.clearTimeout(fallback);
+          setIntroReady(true);
+        }
+      });
+    return () => { cancelled = true; window.clearTimeout(fallback); };
   }, []);
 
   return (
@@ -48,35 +77,34 @@ export default function Hero() {
         />
         <div className="hero-backdrop-overlay" />
       </div>
-      <div className="section-container relative z-10 w-full pt-28 pb-20 md:pt-36 md:pb-24">
+      <div className="section-container hero-content relative z-10 w-full">
         <div>
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.55, ease: "easeOut" }}
-            className="max-w-2xl"
+            className="hero-introduction"
           >
-            <p className="mb-5 text-sm font-medium text-[var(--color-accent-2)]">
-              Software engineering undergraduate · Sri Lanka
-            </p>
-            <h1 className="font-display text-6xl leading-[0.95] md:text-8xl text-white">
-              {PERSONAL.name.split(" ").map((part) => (
-                <span key={part} className="block">
-                  {part}
-                </span>
-              ))}
+            <MotionConfig reducedMotion="never">
+            <motion.p className="hero-greeting" initial={{ opacity: 0, y: -18 }} animate={{ opacity: playIntro ? 1 : 0, y: playIntro ? 0 : -18 }} transition={{ duration: 0.55, delay: playIntro ? 0.15 : 0 }}>Hi, I’m</motion.p>
+            <h1 className="hero-name" aria-label={PERSONAL.name}>
+              <AnimatedNameLine text={PERSONAL.name.split(" ")[0]} className="hero-name-first" delay={0.65} play={playIntro} />
+              <AnimatedNameLine text={PERSONAL.name.split(" ").slice(1).join(" ")} className="hero-name-last" delay={1.4} play={playIntro} />
             </h1>
-            <p className="mt-7 max-w-xl text-lg leading-relaxed text-slate-400 md:text-xl">
+            <motion.p className="hero-eyebrow" initial={{ opacity: 0 }} animate={{ opacity: playIntro ? 1 : 0 }} transition={{ duration: 0.5, delay: playIntro ? 2.3 : 0 }}>Software engineering undergraduate</motion.p>
+            </MotionConfig>
+            <p className="hero-location"><MapPin size={14} aria-hidden="true" />Sri Lanka<span aria-hidden="true">/</span>Open to internships</p>
+            <p className="hero-lead">
               I build practical software, with a focus on Java, Android and
               backend development.
             </p>
-            <p className="mt-3 max-w-lg leading-relaxed text-slate-500">
+            <p className="hero-description">
               Currently studying at The Open University of Sri Lanka and looking
               for an internship where I can contribute to a thoughtful
               engineering team.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <div className="hero-actions">
               <a
                 href="#projects"
                 onClick={(event) => {
@@ -85,22 +113,22 @@ export default function Hero() {
                     .getElementById("projects")
                     ?.scrollIntoView({ behavior: scrollBehavior() });
                 }}
-                className="inline-flex min-h-11 items-center gap-2 border-b border-[var(--color-accent)] pb-1 font-medium text-[var(--color-accent)] transition-colors hover:text-[var(--color-text)]"
+                className="hero-primary-link"
               >
-                Explore selected work <ArrowUpRight size={16} />
+                View projects <ArrowUpRight size={17} aria-hidden="true" />
               </a>
               <a
                 href={PERSONAL.resumeUrl}
                 download="Vichara_Tharkana_CV.pdf"
-                className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-slate-400 transition-colors hover:text-white"
+                className="hero-secondary-link"
               >
-                <Download size={15} /> Resume
+                <Download size={16} aria-hidden="true" /> Download resume
               </a>
               <SignatureVector className="hero-signature" />
             </div>
 
-            <div className="mt-10 flex items-center gap-5 border-t border-white/10 pt-5">
-              <span className="text-sm text-slate-500">Elsewhere</span>
+            <div className="hero-socials">
+              <span className="text-xs text-slate-500">Find me on</span>
               {[
                 {
                   icon: Github,
