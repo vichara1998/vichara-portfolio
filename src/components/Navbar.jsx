@@ -30,7 +30,7 @@ export default function Navbar() {
       if (event.type === "keydown" && event.key === "Escape") setMobileOpen(false);
       if (event.type === "pointerdown" && !event.target.closest(".reference-navbar, .reference-mobile-menu")) setMobileOpen(false);
     };
-    const desktop = window.matchMedia("(min-width: 1200px)");
+    const desktop = window.matchMedia("(min-width: 640px)");
     const closeOnDesktop = () => { if (desktop.matches) setMobileOpen(false); };
     document.addEventListener("keydown", dismiss);
     document.addEventListener("pointerdown", dismiss);
