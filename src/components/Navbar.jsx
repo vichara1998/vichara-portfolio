@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Moon, Sun, SunMoon, FileDown, Menu, X } from "lucide-react";
+import { Moon, Sun, SunMoon, FileDown, Download, Menu, X } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
 import { useScrollSpy } from "../hooks/useScrollSpy";
 import { PERSONAL, NAV_LINKS } from "../data";
@@ -76,12 +76,18 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={cycleTheme}
-                className="nav-theme-toggle flex h-11 min-w-11 items-center justify-center gap-2 px-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent)]"
+                className="nav-theme-toggle flex min-w-11 items-center justify-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent)]"
                 aria-label={`Theme: ${themeLabel}${mode === "auto" ? " (follows system)" : ""}. Switch to ${nextMode} mode`}
                 title={`Theme: ${themeLabel}. Click for ${nextMode} mode`}
               >
-                <ThemeIcon size={19} aria-hidden="true" />
-                <span className="hidden text-xs sm:inline">{themeLabel}</span>
+                <span className="nav-theme-icon" aria-hidden="true">
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.span key={mode} initial={{ opacity: 0, rotate: -75, scale: 0.6 }} animate={{ opacity: 1, rotate: 0, scale: 1 }} exit={{ opacity: 0, rotate: 75, scale: 0.6 }} transition={{ duration: 0.18 }}>
+                      <ThemeIcon size={18} />
+                    </motion.span>
+                  </AnimatePresence>
+                </span>
+                <span className="nav-theme-label hidden text-xs sm:inline">{themeLabel}</span>
               </button>
 
               <a
@@ -90,8 +96,9 @@ export default function Navbar() {
                 className="nav-resume-link hidden items-center gap-2 sm:inline-flex"
                 aria-label="Download resume as PDF"
               >
-                <FileDown size={17} strokeWidth={1.6} aria-hidden="true" />
-                Resume
+                <span className="nav-resume-icon"><FileDown size={17} strokeWidth={1.6} aria-hidden="true" /></span>
+                <span>Resume</span>
+                <Download className="nav-resume-arrow" size={14} aria-hidden="true" />
               </a>
 
               <button
@@ -134,8 +141,9 @@ export default function Navbar() {
                 className="nav-resume-link mt-4 inline-flex items-center gap-2 self-start"
                 aria-label="Download resume as PDF"
               >
-                <FileDown size={17} strokeWidth={1.6} aria-hidden="true" />
-                Download resume
+                <span className="nav-resume-icon"><FileDown size={17} strokeWidth={1.6} aria-hidden="true" /></span>
+                <span>Download resume</span>
+                <Download className="nav-resume-arrow" size={14} aria-hidden="true" />
               </a>
             </div>
           </motion.div>
