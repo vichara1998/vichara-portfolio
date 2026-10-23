@@ -25,7 +25,7 @@ import chatbotImage4 from "../projects-ss/chat-botAI/optimized/4.jpg";
 import chatbotImage5 from "../projects-ss/chat-botAI/optimized/5.jpg";
 import chatbotImage6 from "../projects-ss/chat-botAI/optimized/6.jpg";
 import chatbotImage7 from "../projects-ss/chat-botAI/optimized/7.jpg";
-import vcsImage1 from "../projects-ss/vcs/VCS_card.png";
+import vcsImage1 from "../projects-ss/vcs/VCS_card.jpg";
 import vcsImage2 from "../projects-ss/vcs/VCS 1.png";
 import vcsImage3 from "../projects-ss/vcs/VCS 2.png";
 import vcsImage4 from "../projects-ss/vcs/VCS 3.png";
