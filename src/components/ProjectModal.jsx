@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -15,23 +15,46 @@ import {
  */
 export default function ProjectModal({ project, onClose }) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const dialogRef = useRef(null);
 
   useEffect(() => {
     if (!project) return undefined;
 
     setActiveImageIndex(0);
+    const previousFocus = document.activeElement;
+    const dialog = dialogRef.current;
+    dialog?.focus();
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     function handleKeyDown(event) {
       if (event.key === "Escape") onClose();
+      if (event.key === "Tab" && dialog) {
+        const focusable = Array.from(dialog.querySelectorAll(
+          'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex="0"]',
+        ));
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (!first) {
+          event.preventDefault();
+          dialog.focus();
+        } else if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement) || document.activeElement === dialog)) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && (document.activeElement === last || !dialog.contains(document.activeElement) || document.activeElement === dialog)) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
       if (!project.images?.length) return;
 
       if (event.key === "ArrowLeft") {
+        event.preventDefault();
         setActiveImageIndex((index) =>
           (index - 1 + project.images.length) % project.images.length,
         );
       } else if (event.key === "ArrowRight") {
+        event.preventDefault();
         setActiveImageIndex((index) => (index + 1) % project.images.length);
       }
     }
@@ -40,6 +63,7 @@ export default function ProjectModal({ project, onClose }) {
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
+      previousFocus?.focus({ preventScroll: true });
     };
   }, [project, onClose]);
 
@@ -78,6 +102,8 @@ export default function ProjectModal({ project, onClose }) {
           transition={{ duration: 0.3, ease: "easeOut" }}
           onClick={(e) => e.stopPropagation()}
           role="dialog"
+          ref={dialogRef}
+          tabIndex={-1}
           aria-modal="true"
           aria-labelledby="project-title"
           className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-none bg-navy-900 border border-white/10 shadow-2xl"
