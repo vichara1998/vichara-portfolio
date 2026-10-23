@@ -1,5 +1,5 @@
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import SignatureVector from "../components/signature/SignatureVector";
 import {
   ArrowDown,
@@ -10,26 +10,40 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { PERSONAL, PROJECTS } from "../data";
+import { scrollBehavior } from "../scrollBehavior";
 
 export default function Hero() {
   const heroRef = useRef(null);
+  const backdropRef = useRef(null);
+  const [portraitsReady, setPortraitsReady] = useState(false);
   const hasEnteredView = useInView(heroRef, { once: true, amount: 0.15 });
+
+  useEffect(() => {
+    let cancelled = false;
+    const portraits = Array.from(backdropRef.current.querySelectorAll("img"));
+    Promise.all(portraits.map((portrait) => portrait.decode()))
+      .then(() => { if (!cancelled) setPortraitsReady(true); })
+      .catch(() => { /* Keep the original portrait if the next image cannot load. */ });
+    return () => { cancelled = true; };
+  }, []);
 
   return (
     <section
       ref={heroRef}
       id="hero"
-      className={`relative min-h-[88vh] flex items-center overflow-hidden${hasEnteredView ? " hero-transition-started" : ""}`}
+      className={`relative flex items-center overflow-hidden${hasEnteredView && portraitsReady ? " hero-transition-started" : ""}`}
     >
-      <div className="hero-backdrop" aria-hidden="true">
+      <div ref={backdropRef} className="hero-backdrop" aria-hidden="true">
         <img
-          src={`${import.meta.env.BASE_URL}bg1.png`}
+          src={`${import.meta.env.BASE_URL}bg1.jpg`}
           alt=""
+          decoding="async"
           className="hero-background-image hero-background-image-down"
         />
         <img
-          src={`${import.meta.env.BASE_URL}bg2.png`}
+          src={`${import.meta.env.BASE_URL}bg2.jpg`}
           alt=""
+          decoding="async"
           className="hero-background-image hero-background-image-up"
         />
         <div className="hero-backdrop-overlay" />
@@ -69,7 +83,7 @@ export default function Hero() {
                   event.preventDefault();
                   document
                     .getElementById("projects")
-                    ?.scrollIntoView({ behavior: "smooth" });
+                    ?.scrollIntoView({ behavior: scrollBehavior() });
                 }}
                 className="inline-flex min-h-11 items-center gap-2 border-b border-[var(--color-accent)] pb-1 font-medium text-[var(--color-accent)] transition-colors hover:text-[var(--color-text)]"
               >

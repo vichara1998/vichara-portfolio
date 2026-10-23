@@ -225,6 +225,7 @@ export default function Contact() {
                 </div>
 
                 {/* Status message */}
+                <div role="status" aria-live="polite" aria-atomic="true">
                 {status === "success" && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
@@ -245,6 +246,8 @@ export default function Contact() {
                     Something went wrong. Try emailing me directly.
                   </motion.div>
                 )}
+
+                </div>
 
                 {/* Submit */}
                 <motion.button

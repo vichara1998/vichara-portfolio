@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { SKILLS } from "../data";
+import SkillIcon from "../components/SkillIcon";
 
 export default function Skills() {
   const ref = useRef(null);
@@ -46,9 +47,10 @@ export default function Skills() {
                 {category.items.map((skill) => (
                   <li
                     key={skill.name}
-                    className="py-2.5 text-sm text-slate-400"
+                    className="flex items-center gap-3 py-3 text-sm text-slate-400"
                   >
-                    {skill.name}
+                    <SkillIcon name={skill.name} />
+                    <span>{skill.name}</span>
                   </li>
                 ))}
               </ul>

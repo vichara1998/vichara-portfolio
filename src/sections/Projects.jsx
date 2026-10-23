@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import {
   ArrowLeft,
@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { PROJECTS, PERSONAL } from "../data";
 import ProjectModal from "../components/ProjectModal";
+import { scrollBehavior } from "../scrollBehavior";
 
 const PROJECT_FILTERS = ["All", "AI", "Mobile", "Web"];
 
@@ -19,35 +20,32 @@ function ProjectCard({ project, index, active, onOpen }) {
     <motion.article
       aria-label={`${project.title}${active ? ", selected project" : ""}`}
       aria-current={active ? "true" : undefined}
-      animate={{ scale: active ? 1 : 0.94, opacity: active ? 1 : 0.68 }}
+      animate={{ scale: active ? 1 : 0.94 }}
       transition={{ duration: 0.25 }}
-      className="w-[min(82vw,390px)] shrink-0 snap-center"
+      className="project-carousel-card shrink-0 snap-center"
     >
       <div
-        className="group h-full overflow-hidden border border-[var(--color-border-soft)] shadow-xl transition-colors duration-300 hover:border-[var(--color-accent)]"
-        style={{
-          backgroundColor:
-            "color-mix(in srgb, var(--color-surface) 76%, transparent)",
-        }}
+        className={`project-card group h-full overflow-hidden border transition-colors duration-300 ${active ? "is-active" : ""}`}
       >
         <button
           type="button"
           onClick={() => onOpen(project)}
           aria-label={`Open ${project.title} project details`}
-          className="relative block h-56 w-full overflow-hidden bg-black/15 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent)]"
+          className="project-card-preview relative block h-56 w-full overflow-hidden text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent)]"
         >
           {coverImage ? (
             <>
               <div
                 className="absolute inset-0"
                 style={{
-                  background: `linear-gradient(145deg, ${project.color}35, rgba(0, 0, 0, 0.36))`,
+                  background: `linear-gradient(145deg, ${project.color}18, transparent)`,
                 }}
               />
               <img
                 src={coverImage}
                 alt={`${project.title} preview`}
                 loading={active ? "eager" : "lazy"}
+                draggable={false}
                 className="absolute inset-0 h-full w-full object-contain p-3 transition-transform duration-500 group-hover:scale-[1.04]"
               />
             </>
@@ -66,10 +64,10 @@ function ProjectCard({ project, index, active, onOpen }) {
               </span>
             </div>
           )}
-          <span className="absolute left-4 top-4 font-mono text-xs text-white drop-shadow">
+          <span className="project-card-badge absolute left-4 top-4 px-2 py-1 font-mono text-xs">
             {String(index + 1).padStart(2, "0")}
           </span>
-          <span className="absolute right-4 top-4 border border-white/25 bg-black/45 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white">
+          <span className="project-card-badge absolute right-4 top-4 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider">
             {project.categories[0]}
           </span>
         </button>
@@ -157,19 +155,118 @@ function ProjectCard({ project, index, active, onOpen }) {
 export default function Projects() {
   const ref = useRef(null);
   const carouselRef = useRef(null);
+  const activeIndexRef = useRef(PROJECTS.length > 2 ? 1 : 0);
+  const dragRef = useRef(null);
+  const suppressClickRef = useRef(false);
+  const [isDragging, setIsDragging] = useState(false);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const [activeProject, setActiveProject] = useState(null);
+  const closeProject = useCallback(() => setActiveProject(null), []);
   const [activeFilter, setActiveFilter] = useState("All");
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(activeIndexRef.current);
   const visibleProjects = PROJECTS.filter(
     (project) =>
       activeFilter === "All" || project.categories.includes(activeFilter),
   );
 
   useEffect(() => {
-    setActiveIndex(0);
-    carouselRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    const initialIndex = carousel.children.length > 2 ? 1 : 0;
+    activeIndexRef.current = initialIndex;
+    setActiveIndex(initialIndex);
+    const centerSelectedCard = () => {
+      const card = carousel.children[activeIndexRef.current];
+      if (card) carousel.scrollTo({
+        left: card.offsetLeft - (carousel.clientWidth - card.offsetWidth) / 2,
+        behavior: "instant",
+      });
+    };
+    centerSelectedCard();
+    const observer = new ResizeObserver(centerSelectedCard);
+    observer.observe(carousel);
+    return () => observer.disconnect();
   }, [activeFilter]);
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel || activeProject) return;
+    const mouse = window.matchMedia("(hover: hover) and (pointer: fine)");
+    let frame = 0;
+    let lastFrame = 0;
+    let position = 0;
+    let speed = 0;
+    let targetSpeed = 0;
+
+    function stop(settle = true) {
+      const wasScrolling = Boolean(frame);
+      cancelAnimationFrame(frame);
+      frame = 0;
+      speed = 0;
+      targetSpeed = 0;
+      carousel.classList.remove("is-hover-scrolling");
+      if (settle && wasScrolling) {
+        const card = carousel.children[activeIndexRef.current];
+        if (card) carousel.scrollTo({
+          left: card.offsetLeft - (carousel.clientWidth - card.offsetWidth) / 2,
+          behavior: scrollBehavior(),
+        });
+      }
+    }
+
+    function animate(now) {
+      const elapsed = Math.min(now - lastFrame || 16, 40);
+      lastFrame = now;
+      speed += (targetSpeed - speed) * (1 - Math.exp(-elapsed / 90));
+      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+      position = Math.max(0, Math.min(maxScroll, position + speed * elapsed / 1000));
+      carousel.scrollTo({ left: position, behavior: "instant" });
+      if ((position <= 0 && targetSpeed < 0) || (position >= maxScroll && targetSpeed > 0)) {
+        stop(false);
+        return;
+      }
+      frame = requestAnimationFrame(animate);
+    }
+
+    function handleMove(event) {
+      if (!mouse.matches || event.pointerType !== "mouse" || event.buttons) { stop(false); return; }
+      const bounds = carousel.getBoundingClientRect();
+      const x = event.clientX - bounds.left;
+      const edgeZone = bounds.width * 0.3;
+      const intensity = x < edgeZone ? -(1 - x / edgeZone)
+        : x > bounds.width - edgeZone ? (x - (bounds.width - edgeZone)) / edgeZone : 0;
+      if (!intensity || carousel.scrollWidth <= carousel.clientWidth + 1) { stop(); return; }
+      targetSpeed = Math.max(-1, Math.min(1, intensity)) * 260;
+      if (!frame) {
+        position = carousel.scrollLeft;
+        lastFrame = performance.now();
+        carousel.classList.add("is-hover-scrolling");
+        frame = requestAnimationFrame(animate);
+      }
+    }
+
+    const leave = () => stop();
+    const interrupt = () => stop(false);
+    carousel.addEventListener("pointermove", handleMove, { passive: true });
+    carousel.addEventListener("pointerleave", leave);
+    carousel.addEventListener("pointerdown", interrupt);
+    carousel.addEventListener("wheel", interrupt, { passive: true });
+    carousel.addEventListener("keydown", interrupt);
+    window.addEventListener("blur", interrupt);
+    window.addEventListener("resize", interrupt);
+    mouse.addEventListener("change", interrupt);
+    return () => {
+      stop(false);
+      carousel.removeEventListener("pointermove", handleMove);
+      carousel.removeEventListener("pointerleave", leave);
+      carousel.removeEventListener("pointerdown", interrupt);
+      carousel.removeEventListener("wheel", interrupt);
+      carousel.removeEventListener("keydown", interrupt);
+      window.removeEventListener("blur", interrupt);
+      window.removeEventListener("resize", interrupt);
+      mouse.removeEventListener("change", interrupt);
+    };
+  }, [activeFilter, activeProject]);
 
   function updateActiveCard() {
     const carousel = carouselRef.current;
@@ -181,8 +278,8 @@ export default function Projects() {
     let closestDistance = Number.POSITIVE_INFINITY;
 
     Array.from(carousel.children).forEach((card, index) => {
-      const cardCenter =
-        card.getBoundingClientRect().left + card.clientWidth / 2;
+      const bounds = card.getBoundingClientRect();
+      const cardCenter = bounds.left + bounds.width / 2;
       const distance = Math.abs(center - cardCenter);
       if (distance < closestDistance) {
         closestDistance = distance;
@@ -190,6 +287,7 @@ export default function Projects() {
       }
     });
 
+    activeIndexRef.current = closestIndex;
     setActiveIndex((currentIndex) =>
       currentIndex === closestIndex ? currentIndex : closestIndex,
     );
@@ -200,12 +298,42 @@ export default function Projects() {
       0,
       Math.min(visibleProjects.length - 1, activeIndex + direction),
     );
-    carouselRef.current?.children[nextIndex]?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "center",
+    const carousel = carouselRef.current;
+    const card = carousel?.children[nextIndex];
+    if (card) carousel.scrollTo({
+      left: card.offsetLeft - (carousel.clientWidth - card.offsetWidth) / 2,
+      behavior: scrollBehavior(),
     });
+    activeIndexRef.current = nextIndex;
     setActiveIndex(nextIndex);
+  }
+
+  function startDrag(event) {
+    if (event.pointerType !== "mouse" || event.button !== 0) return;
+    suppressClickRef.current = false;
+    dragRef.current = { x: event.clientX, left: event.currentTarget.scrollLeft, moved: false };
+  }
+
+  function dragCards(event) {
+    const drag = dragRef.current;
+    if (!drag) return;
+    const distance = event.clientX - drag.x;
+    if (!drag.moved && Math.abs(distance) < 6) return;
+    if (!drag.moved) {
+      drag.moved = true;
+      suppressClickRef.current = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+      setIsDragging(true);
+    }
+    event.currentTarget.scrollLeft = drag.left - distance;
+  }
+
+  function endDrag(event) {
+    dragRef.current = null;
+    setIsDragging(false);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
   }
 
   return (
@@ -261,9 +389,32 @@ export default function Projects() {
           <div
             ref={carouselRef}
             onScroll={updateActiveCard}
-            className="flex snap-x snap-proximity items-stretch gap-5 overflow-x-auto overflow-y-hidden px-[max(1.5rem,calc((100%-min(82vw,390px))/2))] py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            onPointerDown={startDrag}
+            onPointerMove={dragCards}
+            onDragStart={(event) => event.preventDefault()}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            onLostPointerCapture={() => { dragRef.current = null; setIsDragging(false); }}
+            onPointerLeave={() => { if (!dragRef.current?.moved) dragRef.current = null; }}
+            onClickCapture={(event) => {
+              if (suppressClickRef.current && event.detail !== 0) {
+                event.preventDefault();
+                event.stopPropagation();
+                suppressClickRef.current = false;
+              }
+            }}
+            onKeyDown={(event) => {
+              if (event.target !== event.currentTarget) return;
+              if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+                event.preventDefault();
+                moveCarousel(event.key === "ArrowLeft" ? -1 : 1);
+              }
+            }}
+            tabIndex={0}
+            className={`project-carousel flex items-stretch gap-5 overflow-x-auto overflow-y-hidden py-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${isDragging ? "is-dragging" : ""}`}
             role="region"
             aria-label="Project cards"
+            aria-roledescription="carousel"
             style={{
               touchAction: "pan-x pan-y",
               WebkitOverflowScrolling: "touch",
@@ -281,6 +432,9 @@ export default function Projects() {
             ))}
           </div>
 
+          <p className="project-hover-hint mt-3 text-center text-xs text-slate-500">
+            Hover near either edge to scroll. Move to the center to pause.
+          </p>
           <div className="mt-5 flex items-center justify-center gap-4">
             <button
               type="button"
@@ -346,7 +500,7 @@ export default function Projects() {
 
       <ProjectModal
         project={activeProject}
-        onClose={() => setActiveProject(null)}
+        onClose={closeProject}
       />
     </section>
   );
