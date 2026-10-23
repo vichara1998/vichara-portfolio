@@ -432,9 +432,6 @@ export default function Projects() {
             ))}
           </div>
 
-          <p className="project-hover-hint mt-3 text-center text-xs text-slate-500">
-            Hover near either edge to scroll. Move to the center to pause.
-          </p>
           <div className="mt-5 flex items-center justify-center gap-4">
             <button
               type="button"

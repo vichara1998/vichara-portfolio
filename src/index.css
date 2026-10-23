@@ -210,14 +210,6 @@ html.dark .nav-resume-link:hover {
   scroll-behavior: auto;
 }
 
-.project-hover-hint {
-  display: none;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .project-hover-hint { display: block; }
-}
-
 .project-card {
   border-radius: 20px;
   border-color: #a4cecc;
