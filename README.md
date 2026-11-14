@@ -20,19 +20,19 @@
 
 </div>
 
-# ✨ Professional Portfolio
+#  Professional Portfolio
 
 A vibrant personal portfolio designed to showcase my work as a Software Engineering Undergraduate at the Open University of Sri Lanka. This project blends modern frontend engineering, smooth motion graphics, and a polished layout to present my skills, projects, and experience in a memorable way.
 
 ---
 
-## 🌟 About Me
+##  About Me
 
 I am a developer focused on building user-friendly, visually appealing, and high-performing digital experiences. This portfolio serves as a digital resume and a window into my passion for frontend development, design systems, and problem-solving through code.
 
 ---
 
-## 🚀 Highlights
+##  Highlights
 
 - Responsive, mobile-friendly portfolio layout
 - Modern glassmorphism-inspired UI with gradient accents
@@ -42,7 +42,7 @@ I am a developer focused on building user-friendly, visually appealing, and high
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - React 18
 - Vite
@@ -53,7 +53,7 @@ I am a developer focused on building user-friendly, visually appealing, and high
 
 ---
 
-## 📦 Project Structure
+##  Project Structure
 
 ```text
 src/
@@ -67,7 +67,7 @@ src/
 
 ---
 
-## ⚙️ Features
+##  Features
 
 ### 🎨 Frontend Excellence
 - Component-based architecture for maintainability and reuse
