@@ -97,12 +97,7 @@ Then open the local URL shown in the terminal to view the portfolio.
 
 - GitHub: [vichara1998](https://github.com/vichara1998)
 - LinkedIn: [Vichara Tharkana](#)
-- Email: [your.email@example.com](mailto:your.email@example.com)
+- Email: [tharkana.bandara@gmail.com](mailto:your.email@example.com)
 
 ---
 
-<div align="center">
-  <p>
-    <strong>Built with 💜, creativity, and code.</strong>
-  </p>
-</div>
