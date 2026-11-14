@@ -82,14 +82,9 @@ src/
 
 ---
 
-## ▶️ Getting Started
+## 🌐 Live Portfolio
 
-```bash
-npm install
-npm run dev
-```
-
-Then open the local URL shown in the terminal to view the portfolio.
+Visit the live site here: https://vichara1998.github.io/vichara-portfolio/
 
 ---
 
